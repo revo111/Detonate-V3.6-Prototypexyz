@@ -2412,12 +2412,12 @@ box(9,16,15,mu,0,22,0,b);box(3,12,12,mb,-5,22,0,b);const pk=new THREE.Group();bo
 const h=new THREE.Mesh(new THREE.SphereGeometry(5.5,10,8),ms);h.position.y=35;b.add(h);
 const hl=new THREE.Mesh(new THREE.SphereGeometry(6.4,10,6,0,Math.PI*2,0,1.6),mb);hl.position.y=36;b.add(hl);
 box(15,4,4,mu,8,25,-6,b).rotation.y=.4;box(11,4,4,mu,5,24,6,b);
-box(28,5,4,mb,14,25,1,b);box(4,9,3,mb,12,19,1,b);box(10,6,4,mb,-2,24,1,b);box(6,2,2,redM,20,28,1,b);
-const br=new THREE.Mesh(new THREE.CylinderGeometry(1,1,14,6),mb);br.rotation.z=Math.PI/2;br.position.set(33,26,1);b.add(br);
+const gn=new THREE.Group();b.add(gn);box(28,5,4,mb,14,25,1,gn);box(4,9,3,mb,12,19,1,gn);box(10,6,4,mb,-2,24,1,gn);box(6,2,2,redM,20,28,1,gn);
+const br=new THREE.Mesh(new THREE.CylinderGeometry(1,1,14,6),mb);br.rotation.z=Math.PI/2;br.position.set(33,26,1);gn.add(br);
 const fl=new THREE.Mesh(new THREE.SphereGeometry(4,6,5),new THREE.MeshBasicMaterial({color:0xffe08a}));fl.position.set(42,26,1);fl.visible=false;b.add(fl);
 grp.add(b);const rg=new THREE.Mesh(new THREE.RingGeometry(10,13,20),new THREE.MeshBasicMaterial({color:RING[team]}));rg.rotation.x=-Math.PI/2;rg.position.y=1.2;grp.add(rg);
 const hp=new THREE.Mesh(new THREE.PlaneGeometry(34,4),new THREE.MeshBasicMaterial({color:0x40e060}));hp.rotation.x=-Math.PI/2;hp.position.set(0,2,-22);grp.add(hp);
-grp.scale.setScalar(1.25);sc.add(grp);return{grp,b,l1,l2,fl,hp,rg,pk,pl,rc:RING[team]}}
+grp.scale.setScalar(1.25);sc.add(grp);return{grp,b,l1,l2,fl,hp,rg,pk,pl,gn,rc:RING[team]}}
 const CH6=[0,0,0,1,1,1].map(t=>mkChar(t,'nuit')),CH8=[0,0,0,0,1,1,1,1].map(t=>mkChar(t,'desert')),CHN=[0,0,0,0,1,1,1,1].map(t=>mkCharNeon(t)),CHS=[0,0,0,0,0,0,1,1,1,1,1,1].map(t=>mkChar(t,'neige'));let CH=CH6;var CHZ=[],CHW=[];const ALLCH=()=>CH6.concat(CH8,CHN,CHS,CHZ,CHW);const wChars=()=>CHW.length?CHW:(CHW=[0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1].map(t=>mkChar(t,'guerre')));   // Front : 16 soldats (crees au premier chargement)   // CHZ : survivants du mode Zombie (crees au premier chargement de la Foret)
 // noms au-dessus des tetes
 const LBL=Array.from({length:16},()=>{const c=document.createElement('canvas');c.width=256;c.height=64;const t=new THREE.CanvasTexture(c);
@@ -3056,7 +3056,7 @@ function applyNetState(s){
    // une balle de notre propre tir : on reprend le trait deja affiche au moment du clic
    if(q[6]===localSlot){const li=B.findIndex(x=>x.loc&&!x.mt);if(li>=0){const lb=B[li];lb.mt=1;lb.u=q[0];lb.loc=0;if(q[7]>=3){lb.vx=q[3];lb.vy=q[4];lb.sg=q[7]-2}nb.push(lb);lastU=Math.max(lastU,q[0]);continue}if(q[0]<=lu)continue}
    const m=BP.find(w=>!w.visible);if(!m)break;m.visible=true;nb.push({u:q[0],x:q[1],y:q[2],vx:q[3],vy:q[4],team:q[5],id:q[6],m,t:q[7]>=3?.6:.9,xb:q[7]===1?1:0,ar:q[7]===2?1:0,sg:q[7]>=3?q[7]-2:0,mg:q[8]?1:0});
-   if(q[0]>lu){lastU=Math.max(lastU,q[0]);if(q[8])wMgSnd(q[1],q[2],q[6]===localSlot);else if(q[6]!==localSlot&&q[7]!==4){if(q[7]===1)zSnd('xbow',q[1],q[2]);else{shot(Math.max(.15,1-Math.hypot(q[1]-CP.x,q[2]-CP.y)/1100),q[1]-CP.x,q[5]);if(q[7]===3)zSnd('pump',q[1],q[2])}}}}
+   if(q[0]>lu){lastU=Math.max(lastU,q[0]);if(q[8]){wMgSnd(q[1],q[2],q[6]===localSlot);WVIS.mf(q[1],q[2])}else if(q[6]!==localSlot&&q[7]!==4){if(q[7]===1)zSnd('xbow',q[1],q[2]);else{shot(Math.max(.15,1-Math.hypot(q[1]-CP.x,q[2]-CP.y)/1100),q[1]-CP.x,q[5]);if(q[7]===3)zSnd('pump',q[1],q[2])}}}}
   for(const b of B)if(b.loc&&!b.mt&&now-b.born<450)nb.push(b);
   for(const b of B)if(!nb.includes(b))b.m.visible=false;
   B=nb}
@@ -7705,22 +7705,27 @@ function WARM(){return!!(CUR&&CUR.mode==='war')&&!TDM()}
 const W_T=360,W_WIN=4,W_MAXR=7,W_TGHP=4,W_BRF=8,W_C4F=1.5,W_C4TB=1.2,W_C4TV=.7,W_IMM=4,W_MCD=90,W_SCD=90,W_REV=5,W_MIMM=8,W_MSP=600;
 const WTK={sp:76,turn:.8,trt:1.5,rl:4,range:1150,shv:1500,len:200,wid:112,r:52,c:[-50,0,50],piv:6,gun:-14,mz:178,acc:110};   // dimensions du char (collision : 3 cercles le long de la caisse)
 const WJP={sp:265,turn:2.3,trt:6,len:124,wid:68,r:34,c:[-30,30],hp:4,piv:-16,gun:0,cd:.15,resp:20,mz:36,acc:420};
-let WV=[],WSt={tg:[],br:[],c4:[],sh:[],ev:[],evU:0,shU:0,kd:[0,0],dmg:[0,0],sig:'',rnd:-1,ms:[],msU:0,mcd:[0,0],scd:[0,0],rv:[0,0]},WLEV=0,WNAV={};
+let WV=[],WSt={tg:[],br:[],c4:[],sh:[],ev:[],evU:0,shU:0,kd:[0,0],dmg:[0,0],sig:'',rnd:-1,ms:[],msU:0,mcd:[0,0],scd:[0,0],rv:[0,0],bx:[]},WLEV=0,WNAV={};
 const WP=v=>v.k==='tank'?WTK:WJP;
 const wBrReq=i=>((wDeco().bridges||[])[i]||{}).k==='road'?3:1;   // C4 necessaires : 3 sur un grand pont, 1 sur une passerelle
 const wDeco=()=>(CUR&&CUR.DECO)||{};
 const wHost=()=>!netMode||isHost||HEADLESS;
 // ----- debut de manche : cibles tirees au sort dans le camp de chaque equipe, vehicules au garage
-function warReset(){st.clock=W_T;st.msg='';WSt.c4=[];WSt.sh=[];WSt.ev=[];WSt.kd=[0,0];WSt.dmg=[0,0];WSt.kt=[0,0];WSt.ms=[];WSt.mcd=[T,T];WSt.scd=[T,T];WSt.rv=[0,0];WSt.bj=[null,null];WSt.pre=[0,0];const D=wDeco();
+function warReset(){st.clock=W_T;st.msg='';WSt.c4=[];WSt.sh=[];WSt.ev=[];WSt.kd=[0,0];WSt.dmg=[0,0];WSt.kt=[0,0];WSt.ms=[];WSt.mcd=[T,T];WSt.scd=[T,T];WSt.rv=[0,0];WSt.bj=[null,null];WSt.pre=[0,0];WSt.bx=[];const D=wDeco();
  WSt.br=(D.bridges||[]).map(()=>({st:0,c4:0,f:-1,lk:-1}));
  if(wHost()){WSt.tg=[];for(const t of[0,1]){const g=spawnGroup(t),S=(D.slots&&D.slots[g])||[],idx=S.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,4);let nA=0,nB=0;const KD=['A','B',Math.random()<.5?'A':'B',Math.random()<.5?'A':'B'].sort(()=>Math.random()-.5);
-   const L=idx.map((i,j)=>{const[x,y]=S[i],k=KD[j],vert=k==='B'&&Math.random()<.4,w=k==='A'?150:(vert?90:220),h=k==='A'?150:(vert?220:90);return{team:t,k,x:Math.round(x-w/2),y:Math.round(y-h/2),w,h,hp:W_TGHP,dead:0,a:k==='A'?(g?180:0):(vert?(g?-90:90):(g?180:0))}}).sort((a,b)=>a.y-b.y);
+   const L=idx.map((i,j)=>{const[x,y]=S[i],k=KD[j],vert=false,w=k==='A'?150:(vert?90:220),h=k==='A'?150:(vert?220:90);return{team:t,k,x:Math.round(x-w/2),y:Math.round(y-h/2),w,h,hp:W_TGHP,dead:0,a:k==='A'?(g?180:0):(vert?(g?-90:90):(g?180:0))}}).sort((a,b)=>a.y-b.y);
    for(const q of L){q.n=q.k==='A'?++nA:++nB;WSt.tg.push(q)}}}
  WV=[];for(const t of[0,1]){   // (v.lane : axe choisi par le tank bot, tire a chaque manche)
- const g=spawnGroup(t);for(const k of['tank','jeep']){const p=((k==='tank'?D.tank:D.jeep)||[])[g]||[WW/2,WH/2,0],a=p[2]*Math.PI/180;WV.push({i:WV.length,k,team:t,x:p[0],y:p[1],a,ta:a,v:0,drv:-1,gun:-1,hp:k==='jeep'?WJP.hp:99,st:0,imm:0,cd:0,rsp:0,fq:0,sx:p[0],sy:p[1],sa:a})}}
+ const g=spawnGroup(t);for(const[k,n]of[['tank',0],['jeep',0],['jeep',1]]){let p=((k==='tank'?D.tank:D.jeep)||[])[g]||[WW/2,WH/2,0];if(n){const tp=(D.tank||[])[g]||p;p=wJeep2(p,tp)}const a=p[2]*Math.PI/180;
+  WV.push({i:WV.length,k,team:t,x:p[0],y:p[1],a,ta:a,v:0,drv:-1,gun:-1,hp:k==='jeep'?WJP.hp:99,st:0,imm:0,cd:0,rsp:0,fq:0,sx:p[0],sy:p[1],sa:a,jr:k==='jeep'?(n?'def':'esc'):''})}}
  for(const e of E){e.wv=-1;e.ws=-1;e.wl=-1;e.c4=1;e.c4p=0;e.wAct=0;e.wrole=''}
  if(!HEADLESS&&typeof WAR!=='undefined')WSt.br.forEach((b,i)=>WAR.bridge(i,0));
  wApplyOB(1);wRoles()}
+// place du second 4x4 : symetrique du premier par rapport au tank (sinon la place libre la plus proche)
+function wJeep2(p,tp){const a=p[2]*Math.PI/180,o={k:'jeep',a},ok=(x,y)=>{o.x=x;o.y=y;return!wvBlock(o,x,y,a)&&!wvPH(o,x,y,a)&&Math.hypot(x-tp[0],y-tp[1])>170&&Math.hypot(x-p[0],y-p[1])>110};
+ const x0=p[0],y0=2*tp[1]-p[1];for(let r=0;r<400;r+=20)for(let k=0;k<(r?16:1);k++){const x=x0+Math.cos(k*Math.PI/8)*r,y=y0+Math.sin(k*Math.PI/8)*r;if(x>80&&y>80&&x<WW-80&&y<WH-80&&ok(x,y))return[Math.round(x),Math.round(y),p[2]]}return[x0,y0,p[2]]}
+const wTV=(t,k,n)=>WV.filter(v=>v.team===t&&v.k===k)[n||0];
 // obstacles dynamiques : cibles (type 'X') et ponts detruits (eau) ; grille de collision (et navigation sur l'hote) refaites
 function wApplyOB(nav){OB=OB.filter(o=>o.t!=='X'&&!o.wbr);WSt.tg.forEach((q,i)=>OB.push({t:'X',x:q.x,y:q.y,w:q.w,h:q.h,ti:i}));
  const D=wDeco();WSt.br.forEach((b,i)=>{const B=D.bridges&&D.bridges[i];if(!B)return;if(b.st){for(const[x,y,w,h]of B.sl)OB.push({t:'u',x,y,w,h,wbr:1});return}
@@ -7729,7 +7734,7 @@ function wApplyOB(nav){OB=OB.filter(o=>o.t!=='X'&&!o.wbr);WSt.tg.forEach((q,i)=>
  buildGrid();if(nav&&wHost()){buildNav();WNAV={}}WSt.sig=wSig()}
 function wSig(){return WSt.tg.map(q=>q.x+','+q.y+','+q.w).join('|')+'#'+WSt.br.map(b=>b.st).join('')}
 // roles des bots : tank (conducteur, tireur), 4x4 (conducteur, tireur), escorte, defense, attaque
-function wRoles(){for(const t of[0,1]){const B_=E.filter(e=>e.team===t&&!e.p).sort((a,b)=>a.id-b.id),R=['tdrv','tgun','jdrv','jgun','def','def','esc','def','esc','att'];B_.forEach((e,i)=>e.wrole=R[i]||'att')}}
+function wRoles(){for(const t of[0,1]){const B_=E.filter(e=>e.team===t&&!e.p).sort((a,b)=>a.id-b.id),R=['tdrv','tgun','jdrv','jgun','def','j2drv','j2gun','esc','def','att'];B_.forEach((e,i)=>e.wrole=R[i]||'att')}}
 // ----- geometrie des vehicules
 function wvDist(v,x,y){const P=WP(v),c=Math.cos(v.a),s=Math.sin(v.a),dx=x-v.x,dy=y-v.y,u=dx*c+dy*s,w=-dx*s+dy*c,cu=Math.max(-P.len/2,Math.min(P.len/2,u)),cw=Math.max(-P.wid/2,Math.min(P.wid/2,w));return Math.hypot(u-cu,w-cw)}
 const wSolid=v=>!(v.st&&v.k==='jeep'&&T>v.rsp-1);   // l'epave du 4x4 disparait juste avant sa reapparition
@@ -7831,7 +7836,7 @@ function wThreat(t){const own=WSt.tg.filter(q=>q.team===t&&!q.dead),g=spawnGroup
  for(const v of WV){if(v.team===t||v.st||v.x===undefined||v.k!=='jeep'||!wSpotted(v,t))continue;if(nr(v,950))return v}return null}
 function wSatNeed(t){const own=WSt.tg.filter(q=>q.team===t&&!q.dead),g=spawnGroup(t);return!!(wThreat(t)||E.some(f=>f.alive&&f.team!==t&&own.some(q=>Math.hypot(q.x+q.w/2-f.x,q.y+q.h/2-f.y)<900))||(st.clock<W_T-60&&WV.some(v=>v.team!==t&&v.k==='tank'&&!v.st&&v.x!==undefined&&T-((v.sp&&v.sp[t])??-99)>25)))}   // on cherche aussi le tank ennemi perdu de vue
 // bots : le defenseur le plus proche va au lance-missiles (ou a l'antenne) quand c'est pret et utile
-function wBotSupport(e,go){if(e.wv>=0||e.c4p>0||!e.alive)return false;const t=e.team,CREW=['tdrv','tgun','jdrv','jgun'];
+function wBotSupport(e,go){if(e.wv>=0||e.c4p>0||!e.alive)return false;const t=e.team,CREW=['tdrv','tgun','jdrv','jgun','j2drv','j2gun'];
  const job=(k,ok)=>{if(!ok)return false;const own=WSt.tg.filter(q=>q.team===t&&q.k===k&&!q.dead);if(!own.length)return false;let bb=null,bd=1e9,bq=null;
   for(const m of E){if(!m.alive||m.team!==t||m.p||m.wv>=0||CREW.includes(m.wrole))continue;for(const q of own){const d=Math.hypot(q.x+q.w/2-m.x,q.y+q.h/2-m.y);if(d<bd){bd=d;bb=m;bq=q}}}
   if(bb!==e||bd>1500)return false;const near=wTgNear(e,k);
@@ -7857,7 +7862,7 @@ function wBridgeJob(t){const J=WSt.bj||(WSt.bj=[null,null]);let j=J[t];if(j&&(T>
  if(!j){const i=wBridgePick(t);if(i>=0)j=J[t]={i,u:T+30}}return j?(wDeco().bridges||[])[j.i]:null}
 // sapeurs : les bots a pied les plus proches (avec un C4) vont poser leurs charges depuis le bout du pont de leur cote
 function wBotSapper(e,go){if(!(e.c4>0)||e.wv>=0||e.wl>=0||!e.alive)return false;const t=e.team,b=wBridgeJob(t);if(!b)return false;const S=WSt.br[b.i],need=wBrReq(b.i)-S.c4;if(need<=0)return false;
- const CREW=['tdrv','tgun','jdrv','jgun'],C=E.filter(m=>m.alive&&m.team===t&&!m.p&&m.wv<0&&!(m.wl>=0)&&m.c4>0&&!CREW.includes(m.wrole)&&Math.hypot(m.x-b.x,m.y-b.y)<1700).sort((a,c)=>Math.hypot(a.x-b.x,a.y-b.y)-Math.hypot(c.x-b.x,c.y-b.y)).slice(0,need);
+ const CREW=['tdrv','tgun','jdrv','jgun','j2drv','j2gun'],C=E.filter(m=>m.alive&&m.team===t&&!m.p&&m.wv<0&&!(m.wl>=0)&&m.c4>0&&!CREW.includes(m.wrole)&&Math.hypot(m.x-b.x,m.y-b.y)<1700).sort((a,c)=>Math.hypot(a.x-b.x,a.y-b.y)-Math.hypot(c.x-b.x,c.y-b.y)).slice(0,need);
  const k=C.indexOf(e);if(k<0)return false;
  const ex=spawnGroup(t)===0?b.x0+24:b.x1-24,py=(b.y0+b.y1)/2+(b.k==='road'?(k-1)*50:0);
  if(Math.abs(e.x-ex)<40&&Math.abs(e.y-py)<46&&wC4Zone(e)){e.wAct=1;e.mode='c4';e.tag='sapb'+b.i;e.path=[[ex,py]];e.pi=0;return true}
@@ -7885,7 +7890,7 @@ function wDrive(v,mx,my,dt){const P=WP(v);if(v.imm>T||v.st||st.s!=='live'){v.v=0
   const tr=P.turn*dt,na=v.a+Math.max(-tr,Math.min(tr,df));if(wvFree(v,v.x,v.y,na))v.a=na;tv=(rv?-.6:1)*P.sp*L*Math.max(v.k==='jeep'?.2:0,Math.cos(df))}
  const acc=P.acc*dt;v.v+=Math.max(-acc,Math.min(acc,tv-v.v));
  if(Math.abs(v.v)>.5){const nx=v.x+Math.cos(v.a)*v.v*dt,ny=v.y+Math.sin(v.a)*v.v*dt;
-  if(wvFree(v,nx,ny,v.a)||wPush(v,nx,ny)){v.x=nx;v.y=ny}else if(wvFree(v,nx,v.y,v.a)){v.x=nx;v.v*=.8}else if(wvFree(v,v.x,ny,v.a)){v.y=ny;v.v*=.8}else v.v=0}
+  if(wvFree(v,nx,ny,v.a)||wPush(v,nx,ny)){v.x=nx;v.y=ny}else if(wvFree(v,nx,v.y,v.a)){v.x=nx;v.v*=.8}else if(wvFree(v,v.x,ny,v.a)){v.y=ny;v.v*=.8}else{if(Math.abs(v.v)>45&&T>(v.bT||0)){v.bT=T+.8;wEv('vb',v.x+Math.cos(v.a)*WP(v).len*.5*Math.sign(v.v),v.y+Math.sin(v.a)*WP(v).len*.5*Math.sign(v.v),v.i)}v.v=0}}
  wCrush(v)}
 // le tank ecrase les ennemis pris sous l'avant de la caisse (dans le sens de la marche) ; frole sur le cote, on est seulement bouscule.
 // le 4x4 renverse les ennemis ; les allies sont pousses de cote
@@ -7925,8 +7930,8 @@ function wFire(e,fire,dt){const v=WV[e.wv];if(!v||e.ws!==1||v.st)return;const P=
  if(v.k==='tank'){if(fire)v.fq=T+.7;if(!(v.fq>T)||v.cd>0||Math.abs(df)>.12)return;v.fq=0;v.cd=WTK.rl;const[mx_,my_]=wMuzzle(v);
   WSt.sh.push({u:++WSt.shU,x:mx_,y:my_,vx:Math.cos(v.ta)*WTK.shv,vy:Math.sin(v.ta)*WTK.shv,t:WTK.range/WTK.shv,team:v.team,id:e.id,v:v.i});
   wEv('fire',mx_,my_,v.i);wSpotSet(v,1-v.team,1);for(const f of E)if(f.team!==e.team&&f.alive)K[f.team]['tk'+v.i]={x:v.x,y:v.y,t:T,hear:1}}
- else{if(!fire||v.cd>0)return;v.cd=WJP.cd;const m=BP.find(q=>!q.visible);if(!m)return;const a=v.ta+(Math.random()-.5)*.06,[mx_,my_]=wMuzzle(v);m.visible=true;e.fT=.06;
-  B.push({x:mx_,y:my_,vx:Math.cos(a)*960,vy:Math.sin(a)*960,t:.85,team:e.team,id:e.id,u:++bseq,m,mg:1});wSpotSet(v,1-v.team,.3);if(!HEADLESS)wMgSnd(mx_,my_,e.id===localSlot);
+ else{if(!fire||v.cd>0)return;v.cd=WJP.cd;const m=BP.find(q=>!q.visible);if(!m)return;const a=v.ta+(Math.random()-.5)*.06,[mx_,my_]=wMuzzle(v);m.visible=true;
+  B.push({x:mx_,y:my_,vx:Math.cos(a)*960,vy:Math.sin(a)*960,t:.85,team:e.team,id:e.id,u:++bseq,m,mg:1});wSpotSet(v,1-v.team,.3);if(!HEADLESS){wMgSnd(mx_,my_,e.id===localSlot);WVIS.mf(mx_,my_)}
   for(const f of E)if(f.team!==e.team&&f.alive&&Math.hypot(f.x-v.x,f.y-v.y)<850)K[f.team][e.id]={x:v.x,y:v.y,t:T,hear:1}}}
 // balles contre les vehicules : la coque blindee arrete les balles ; une balle dont la trajectoire passe sur le tireur (sur le toit) le touche
 function wBullet(b){for(const v of WV){if(!wSolid(v)||v.drv===b.id||v.gun===b.id)continue;if(wvDist(v,b.x,b.y)>0)continue;
@@ -7943,13 +7948,20 @@ function wShells(dt){for(const s of WSt.sh){const n=10;let boom=null;
  WSt.sh=WSt.sh.filter(s=>s.t>0)}
 // explosion d'un obus (ou d'un missile, etape 3) : 1 point de degats a la cible ennemie touchee, au 4x4 ennemi, et degats de zone aux ennemis a pied
 function wExplode(x,y,team,id,tg,vh,k){let hitT=0;
- if(tg&&tg.team!==team&&!tg.dead){hitT=1;tg.hp--;WSt.dmg[team]++;if(id>=0)stat(id).df=(stat(id).df||0)+1;if(tg.hp<=0){tg.dead=1;WSt.kd[team]++;WSt.kt[team]=T;wEv('tgd',tg.x+tg.w/2,tg.y+tg.h/2,WSt.tg.indexOf(tg))}else wEv('tgh',x,y,WSt.tg.indexOf(tg))}
+ if(tg&&tg.team!==team&&!tg.dead){hitT=1;tg.hp--;WSt.dmg[team]++;if(id>=0)stat(id).df=(stat(id).df||0)+1;if(tg.hp<=0){tg.dead=1;WSt.kd[team]++;WSt.kt[team]=T;const cx=tg.x+tg.w/2,cy=tg.y+tg.h/2;wEv('tgd',cx,cy,WSt.tg.indexOf(tg));wBlast(cx,cy,tg.k==='B'?190:150,tg.k==='B'?130:100,id,null,tg.k==='B'?60:50);if(tg.k==='B')WSt.bx.push({x:cx+(Math.random()-.5)*60,y:cy+(Math.random()-.5)*30,t:T+.8+Math.random()*.5,R:150,d:80,id,o:50})}else wEv('tgh',x,y,WSt.tg.indexOf(tg))}
  if(vh&&vh.team!==team&&vh.k==='jeep')wJeepHit(vh,2,id);
  for(const v of WV)if(v!==vh&&v.k==='jeep'&&!v.st&&v.team!==team&&wvDist(v,x,y)<28)wJeepHit(v,1,id);
  for(const e of E){if(!e.alive||e.team===team||(e.wv>=0&&e.ws===0))continue;const d=Math.hypot(e.x-x,e.y-y);if(d<92&&los({x,y},e))hurt(e,Math.round(115*(1-d/92*.6)),id,1,x,y)}
  wEv(k||'sh',x,y,hitT)}
 function wJeepHit(v,n,id){if(v.st)return;v.hp-=n;wEv('jh',v.x,v.y,v.i);if(v.hp<=0){v.hp=0;v.st=1;v.v=0;v.rsp=T+WJP.resp;
-  for(const r of[v.drv,v.gun]){const p=r>=0?E[r]:null;if(p&&p.wv===v.i){wLeave(p,1);if(p.alive)hurt(p,999,id>=0?id:p.id,1,v.x,v.y)}}v.drv=v.gun=-1;wEv('jd',v.x,v.y,v.i)}}
+  for(const r of[v.drv,v.gun]){const p=r>=0?E[r]:null;if(p&&p.wv===v.i){wLeave(p,1);if(p.alive)hurt(p,999,id>=0?id:p.id,1,v.x,v.y)}}v.drv=v.gun=-1;wEv('jd',v.x,v.y,v.i);
+  wBlast(v.x,v.y,150,115,id,null,30);WSt.bx.push({x:v.x,y:v.y,t:T+1+Math.random()*.7,R:110,d:60,id,o:30})}}
+// explosion d'un vehicule detruit (4x4, lance-missiles, antenne) : degats a tous ceux qui sont proches, allies compris (les conducteurs restent a l'abri du blindage) ;
+// plus on est pres, plus ca fait mal ; un mur ou un vehicule entre l'explosion et soi protege. Les 4x4 tout proches sont abimes.
+function wBlast(x,y,R,dmax,id,k,off){for(const e of E){if(!e.alive||(e.wv>=0&&e.ws===0))continue;const d=Math.max(0,Math.hypot(e.x-x,e.y-y)-(off||0));   // distance comptee depuis le bord du vehicule
+ if(d<R&&los({x,y},e))hurt(e,Math.round(dmax*(1-d/R*.7)),id>=0?id:e.id,1,x,y)}
+ for(const v of WV)if(v.k==='jeep'&&!v.st&&wvDist(v,x,y)<R*.4)wJeepHit(v,1,id);if(k)wEv(k,x,y,Math.round(R))}
+function wBlastTick(){if(!WSt.bx.length)return;for(const b of WSt.bx)if(T>=b.t){b.done=1;wBlast(b.x,b.y,b.R,b.d,b.id,'vx',b.o)}WSt.bx=WSt.bx.filter(b=>!b.done)}
 // grenade : le tank n'y est pas sensible ; le 4x4 perd 1 point (sur 4)
 function wGrenBoom(X,Y,id){for(const v of WV)if(v.k==='jeep'&&!v.st&&wvDist(v,X,Y)<GR_R*.7)wJeepHit(v,1,id)}
 // ----- C4 (ponts et vehicules)
@@ -7973,7 +7985,7 @@ function warUpdate(dt){if(st.s!=='live')return;st.clock-=dt;
   if(v.st)continue;for(const r of[v.drv,v.gun]){const p=r>=0?E[r]:null;if(r>=0&&(!p||!p.alive||p.wv!==v.i)){if(v.drv===r)v.drv=-1;if(v.gun===r)v.gun=-1}}
   if(v.drv<0&&Math.abs(v.v)>0){v.v*=Math.pow(.02,dt);if(Math.abs(v.v)<2)v.v=0;else{const nx=v.x+Math.cos(v.a)*v.v*dt,ny=v.y+Math.sin(v.a)*v.v*dt;if(wvFree(v,nx,ny,v.a)){v.x=nx;v.y=ny}else v.v=0}}
   wSeatSync(v)}
- wShells(dt);wC4Tick(dt);wMissiles(dt);wRevealTick();wSpotTick();
+ wShells(dt);wC4Tick(dt);wMissiles(dt);wRevealTick();wSpotTick();wBlastTick();
  for(const t of[0,1]){const en=WSt.tg.filter(q=>q.team!==t);if(en.length&&en.every(q=>q.dead)){wEnd(t,'Cibles détruites');return}}
  if(st.clock<=0){st.clock=0;const a=WSt.kd[0],b=WSt.kd[1];if(a!==b)wEnd(a>b?0:1,'Fin du temps');else if(WSt.dmg[0]!==WSt.dmg[1])wEnd(WSt.dmg[0]>WSt.dmg[1]?0:1,'Fin du temps · dégâts');else if(a>0&&WSt.kt[0]!==WSt.kt[1])wEnd(WSt.kt[0]<WSt.kt[1]?0:1,'Fin du temps · plus rapide');else wEnd(-1,'Égalité')}}
 // les occupants suivent le vehicule (conducteur au centre, tireur sur le toit)
@@ -8050,6 +8062,16 @@ function wBotDrive(e,v,dt){if(st.s!=='live')return[0,0];let gx,gy,rad=4,av=v.av&
   if(v.lane===undefined){const o=WV.find(o=>o.k==='tank'&&o!==v),RB=(wDeco().bridges||[]).filter(b=>b.k==='road'&&!WSt.br[b.i].st&&!(WSt.br[b.i].f>0)),R2=RB.filter(b=>!o||o.lane!==b.i),L_=R2.length?R2:RB;v.lane=L_.length?L_[Math.random()*L_.length|0].i:-1}
   {const b=(wDeco().bridges||[])[v.lane];if(b&&WSt.br[v.lane].f>0&&!(Math.abs(v.x-b.x)<(b.x1-b.x0)/2+60&&Math.abs(v.y-b.y)<160))v.lane=undefined;else if(b&&!WSt.br[v.lane].st){const ex=spawnGroup(v.team)===0?b.x1+170:b.x0-170;if(Math.hypot(v.x-ex,v.y-b.y)>200&&((ex>b.x)?v.x<ex:v.x>ex)){gx=ex;gy=b.y;rad=4}else v.lane=-2}else if(v.lane>=0)v.lane=-2}
   if(!(v.lane>=0)){if(!v.fp||v.fp.q!==bq||T>v.fp.t)v.fp=wFirePos(v,bq);if(v.fp.x!==undefined){gx=v.fp.x;gy=v.fp.y;rad=2}}}
+ else if(v.jr==='def'){const own=WSt.tg.filter(q=>q.team===v.team&&!q.dead),g=spawnGroup(v.team),lim=x=>g===0?Math.min(x,WW/2-260):Math.max(x,WW/2+260);if(!own.length)return Z();
+  const dOwn=(x,y)=>Math.min(...own.map(q=>Math.hypot(q.x+q.w/2-x,q.y+q.h/2-y)));let tg_=null,bd=1e9;
+  for(const o of WV){if(o.team===v.team||o.st||o.x===undefined||!wSpotted(o,v.team))continue;const d=dOwn(o.x,o.y);if(d<1300&&d<bd){bd=d;tg_={x:o.x,y:o.y,r:o.k==='tank'?380:300}}}
+  if(!tg_)for(const f of E){if(!f.alive||f.team===v.team)continue;const k_=K[v.team][f.id];if(!k_||T-k_.t>4)continue;const d=dOwn(k_.x,k_.y);if(d<950&&d<bd){bd=d;tg_={x:k_.x,y:k_.y,r:260}}}
+  if(tg_){const dx=v.x-tg_.x,dy=v.y-tg_.y,L=Math.hypot(dx,dy)||1;if(L<tg_.r+90&&L>tg_.r-110)return Z();gx=lim(tg_.x+dx/L*tg_.r);gy=tg_.y+dy/L*tg_.r}
+  else{const b_=v.i+((T/25)|0),n=own.length,sd=g===0?1:-1;
+   // point de patrouille atteignable (certains points tombent dans une poche fermee : on prend le suivant), choix garde 3 s
+   if(!v.pg||v.pg.b!==b_||v.pg.n!==n||T>v.pg.t){v.pg={b:b_,n,t:T+3,x:undefined};for(let m=0;m<n*2;m++){const q=own[(b_+(m>>1))%n];let x=lim(q.x+q.w/2+sd*230);const y=q.y+q.h/2+((b_+m)%2?130:-130);if(v.sx!==undefined&&Math.hypot(x-v.sx,y-v.sy)<220)x=lim(x+sd*240);const F_=wNavField(v.k,Math.floor(x/WNC),Math.floor(y/WNC),null,3);if(F_&&wNavDir(F_,v.x,v.y)){v.pg.x=x;v.pg.y=y;break}}}
+   if(v.pg.x===undefined)return Z();gx=v.pg.x;gy=v.pg.y;if(Math.hypot(gx-v.x,gy-v.y)<150)return Z()}
+  rad=3}
  else{const tk=WV.find(o=>o.k==='tank'&&o.team===v.team);if(!tk)return Z();const c=Math.cos(tk.a),s=Math.sin(tk.a),sd=v.team?-1:1,dT=Math.hypot(tk.x-v.x,tk.y-v.y);
   // trop pres du tank allie (on le genait, ex. sur un pont) : on s'ecarte
   if(dT<190){const dx=v.x-tk.x,dy=v.y-tk.y,L=Math.hypot(dx,dy)||1;return[dx/L,dy/L]}
@@ -8060,6 +8082,7 @@ function wBotDrive(e,v,dt){if(st.s!=='live')return[0,0];let gx,gy,rad=4,av=v.av&
    const fw=(tk.v||0)<0?-1:1,k=Math.min(1,dG/170)*1.2,ax=c*fw+(gx-v.x)/Math.max(dG,1)*k,ay=s*fw+(gy-v.y)/Math.max(dG,1)*k,L=Math.hypot(ax,ay)||1,m=Math.max(.2,Math.min(1,ts/WJP.sp*(1+dG/170)));
    v.bk=0;v.bx=v.x;v.by=v.y;return[ax/L*m,ay/L*m]}
   if(!av&&dT<700)av={x:tk.x,y:tk.y}}   // le chemin du 4x4 contourne son tank
+ if(!av&&v.k==='jeep'){let o_=null,od=520;for(const o of WV){if(o===v||!wSolid(o)||o.x===undefined)continue;const d=Math.hypot(o.x-v.x,o.y-v.y);if(d<od&&Math.hypot(o.x-gx,o.y-gy)>200){od=d;o_=o}}if(o_)av={x:o_.x,y:o_.y}}   // les 4x4 contournent le vehicule le plus proche
  let F=wNavField(v.k,Math.floor(gx/WNC),Math.floor(gy/WNC),av,rad);if(!F&&av)F=wNavField(v.k,Math.floor(gx/WNC),Math.floor(gy/WNC),null,rad);if(!F)return Z();
  // coince : marche arriere en braquant ; bloque par un autre vehicule (tanks face a face sur un pont) -> on passe ailleurs
  v.bk=(v.bk||0)+dt;if(v.bk>1.4){v.bk=0;const d=Math.hypot(v.x-v.bx,v.y-v.by);v.bx=v.x;v.by=v.y;if(d<12&&!(v.imm>T)){const c=Math.cos(v.a),s_=Math.sin(v.a),bw=wvFree(v,v.x-c*24,v.y-s_*24,v.a),fw=wvFree(v,v.x+c*24,v.y+s_*24,v.a),rl=wvFree(v,v.x,v.y,v.a+.25),rr=wvFree(v,v.x,v.y,v.a-.25);v.escM=bw?-1:(fw?1:(rl?2:(rr?3:-1)));v.brev=T+1.3;v.nst=(v.nst||0)+1;const o=WV.find(o=>o!==v&&wSolid(o)&&Math.hypot(o.x-v.x,o.y-v.y)<280);if(o&&v.nst>=2){v.av={x:o.x,y:o.y,t:T+14};v.nst=0}if(v.fp&&v.nst>=3){v.fpBad.push([v.fp.x,v.fp.y,T+40]);v.fp=null;v.nst=0}}else if(d>40)v.nst=0}
@@ -8104,8 +8127,8 @@ function thinkWar(e){if(st.s!=='live'){e.path=[];return}if(e.wv>=0||e.wl>=0)retu
  if(wBotFlee(e,go))return;
  if(wBotSupport(e,go))return;
  if(wBotSapper(e,go))return;
- const R=e.wrole,want=R==='tdrv'||R==='tgun'?'tank':(R==='jdrv'||R==='jgun'?'jeep':null);
- if(want){const v=WV.find(o=>o.k===want&&o.team===e.team&&!o.st);if(v&&(v.drv<0||v.gun<0)){const d=wvDist(v,e.x,e.y);if(d<44){wEnter(e,v);return}if(want==='tank'||d<2200){go('veh'+v.i+'_'+Math.round(v.x/80)+'_'+Math.round(v.y/80),v.x,v.y,'go');return}}}
+ const R=e.wrole,wv_=R==='tdrv'||R==='tgun'?wTV(e.team,'tank',0):(R==='jdrv'||R==='jgun'?wTV(e.team,'jeep',0):(R==='j2drv'||R==='j2gun'?wTV(e.team,'jeep',1):null)),want=wv_?wv_.k:null;
+ if(want){const v=wv_&&!wv_.st?wv_:null;if(v&&(v.drv<0||v.gun<0)){const d=wvDist(v,e.x,e.y);if(d<44){wEnter(e,v);return}if(want==='tank'||d<2200){go('veh'+v.i+'_'+Math.round(v.x/80)+'_'+Math.round(v.y/80),v.x,v.y,'go');return}}}
  {const v=WV.find(o=>o.k==='tank'&&o.team===e.team&&!o.st&&(o.drv<0||o.gun<0)&&wvDist(o,e.x,e.y)<260);if(v&&!E.some(m=>m!==e&&m.alive&&m.team===e.team&&m.wv<0&&(m.wrole==='tdrv'||m.wrole==='tgun')&&wvDist(v,m.x,m.y)<700)){if(wvDist(v,e.x,e.y)<44){wEnter(e,v);return}go('veh'+v.i+'_'+Math.round(v.x/80)+'_'+Math.round(v.y/80),v.x,v.y,'go');return}}
  const tk=WV.find(o=>o.k==='tank'&&o.team===e.team);
  if((R==='esc'||want)&&tk){const c=Math.cos(tk.a),s=Math.sin(tk.a),sd=(e.id%3)-1,bk=110+(e.id%2)*50,bx=tk.x-c*bk-s*sd*100,by=tk.y-s*bk+c*sd*100;
@@ -8373,8 +8396,52 @@ const WVIS=(()=>{
  function trail(x,y,z){const p=TRP.find(o=>o.t>=o.L)||TRP[0];p.t=0;p.L=1.7+Math.random()*.6;p.sz=16+Math.random()*6;p.s.visible=true;p.s.position.set(x,y,z);p.s.scale.setScalar(p.sz)}
  function ring(x,y,col,dl){const p=RNG.find(o=>o.t>=o.L)||RNG[0];p.t=-(dl||0);p.L=1.5;p.r.material.color.setHex(col);p.r.position.set(x,9,y);p.r.visible=false}
  function init(){if(G)return;G=new THREE.Group();sc.add(G);pools()}
+ // ---------- traces de chenilles et de pneus : dessinees dans des tuiles de sol (512 x 512 unites ; texture 512 px sur PC, 256 sur telephone),
+ // elles s'estompent lentement (a moitie en un peu plus d'une minute) et sont effacees a chaque manche.
+ // Tank : deux bandes avec les crampons des patins. 4x4 : meme systeme que les camionnettes de la Neige : 4 roues (traces avant plus
+ // legeres, elles s'ecartent dans les virages), creux tasse aux bords adoucis, sculptures en chevrons raccordees d'un troncon a l'autre,
+ // fine crete de terre repoussee sur les bords.
+ const TRK={T:new Map(),dirty:new Set(),up:0,rnd:-1,px:0},TS_=512;
+ function trkRes(){return TRK.px||(TRK.px=typeof fxLevel==='function'&&fxLevel()>=1?256:512)}
+ function trkTile(ix,iy){const k=ix+','+iy;let o=TRK.T.get(k);if(o)return o;const c=document.createElement('canvas');c.width=c.height=trkRes();const x=c.getContext('2d'),tx=new THREE.CanvasTexture(c);tx.anisotropy=4;
+  const m=new THREE.MeshLambertMaterial({map:tx,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4});
+  const p=new THREE.Mesh(new THREE.PlaneGeometry(TS_,TS_),m);p.rotation.x=-Math.PI/2;p.position.set(ix*TS_+TS_/2,.15,iy*TS_+TS_/2);p.renderOrder=-1;G.add(p);o={c,x,tx,p,ink:0,ft:5*Math.random()};TRK.T.set(k,o);return o}
+ // un bout de trace de (x0,y0) a (x1,y1), largeur w, motif fn dans le repere du trait (x le long du trait), dans toutes les tuiles touchees
+ function trkStroke(x0,y0,x1,y1,w,fn){const a=Math.atan2(y1-y0,x1-x0),L=Math.hypot(x1-x0,y1-y0),m=w+4,k=trkRes()/TS_;
+  for(let ix=Math.floor((Math.min(x0,x1)-m)/TS_);ix<=Math.floor((Math.max(x0,x1)+m)/TS_);ix++)for(let iy=Math.floor((Math.min(y0,y1)-m)/TS_);iy<=Math.floor((Math.max(y0,y1)+m)/TS_);iy++){
+   if(ix<0||iy<0||ix*TS_>WW||iy*TS_>WH)continue;const o=trkTile(ix,iy),x=o.x;x.save();x.setTransform(k,0,0,k,-ix*TS_*k,-iy*TS_*k);x.translate(x0,y0);x.rotate(a);fn(x,L);x.restore();o.ink=1;TRK.dirty.add(o)}}
+ function trkOnBridge(x,y){const D=wDeco();return(D.bridges||[]).some((b,i)=>WSt.br[i]&&!WSt.br[i].st&&x>b.x0-10&&x<b.x1+10&&y>b.y0-10&&y<b.y1+10)}
+ // tank : terre tassee (sombre), bourrelets de terre repoussee sur les bords (clairs), empreintes des crampons
+ function trkTank(x,L,d0){x.fillStyle='rgba(30,23,15,.26)';x.fillRect(0,-12,L+.3,24);x.fillStyle='rgba(20,15,10,.3)';x.fillRect(0,-12.5,L+.3,2.4);x.fillRect(0,10.1,L+.3,2.4);
+  x.fillStyle='rgba(176,156,118,.2)';x.fillRect(0,-15,L+.3,2.4);x.fillRect(0,12.6,L+.3,2.4);
+  x.fillStyle='rgba(18,14,8,.46)';for(let b=(9-d0%9)%9;b<L;b+=9)x.fillRect(b-1.7,-11,3.4,22);x.fillStyle='rgba(160,140,104,.16)';for(let b=(9-d0%9)%9+4.5;b<L;b+=9)x.fillRect(b-.8,-10,1.6,20)}
+ // 4x4 : empreinte d'un pneu (meme dessin que les camionnettes de la Neige, couleurs de la terre) ; k = intensite (roues avant : moitie),
+ // f = sens de l'avant du 4x4 le long du trait (marche arriere : -1), les chevrons gardent leur sens par rapport au vehicule
+ // contact des roues : comme la camionnette, l'avant est un peu plus loin du centre que l'arriere -> en virage les traces avant s'ecartent
+ const JTW=12,JTP=7,WHJ=[[46,-28,.5],[46,28,.5],[-36,-28,1],[-36,28,1]];
+ function trkTire(x,L,d0,k,f){const h=JTW/2,g=x.createLinearGradient(0,-h,0,h);
+  g.addColorStop(0,'rgba(40,30,18,0)');g.addColorStop(.16,'rgba(40,30,18,'+(.44*k)+')');g.addColorStop(.5,'rgba(30,22,12,'+(.52*k)+')');g.addColorStop(.84,'rgba(40,30,18,'+(.44*k)+')');g.addColorStop(1,'rgba(40,30,18,0)');
+  x.fillStyle=g;x.fillRect(0,-h,L+.3,JTW);
+  // chevrons : pointe au centre vers l'avant, branches qui filent vers l'arriere jusqu'au bord (texture de la Neige : 32 px de large, pas de 16)
+  const a=JTW/32,b=JTP/16*f;x.save();x.beginPath();x.rect(0,-h,L+.3,JTW);x.clip();x.fillStyle='rgba(18,12,6,'+(.5*k)+')';x.beginPath();
+  for(let c=(JTP-d0%JTP)%JTP-JTP;c<L+JTP;c+=JTP)for(const sd of[-1,1]){x.moveTo(c-3*b,sd*1.5*a);x.lineTo(c-7*b,sd*12.5*a);x.lineTo(c-2.5*b,sd*12.5*a);x.lineTo(c+1.5*b,sd*1.5*a);x.closePath()}
+  x.fill();x.restore();
+  // fine crete de terre repoussee
+  x.fillStyle='rgba(196,176,136,'+(.26*k)+')';x.fillRect(0,-h+.4,L+.3,.9);x.fillRect(0,h-1.3,L+.3,.9)}
+ function trkTick(dt){
+  if(round!==TRK.rnd){TRK.rnd=round;for(const o of TRK.T.values()){o.x.clearRect(0,0,o.c.width,o.c.height);o.ink=0;TRK.dirty.add(o)}for(const v of WV)v.tkm=null}
+  for(const v of WV){if(v.x===undefined||v.st||!wSolid(v))continue;const tk=v.k==='tank',P=WP(v),c=Math.cos(v.a),s=Math.sin(v.a),
+    C=tk?[[-P.len*.4,-43,1],[-P.len*.4,43,1]]:WHJ,mn=tk?6:9;if(!v.tkm)v.tkm=[];
+   for(let j=0;j<C.length;j++){const[u,w,kk]=C[j],px=v.x+c*u-s*w,py=v.y+s*u+c*w,Lm=v.tkm[j];if(!Lm){v.tkm[j]={x:px,y:py,d:0};continue}
+    const dx=px-Lm.x,dy=py-Lm.y,dd=Math.hypot(dx,dy);if(dd<mn)continue;if(dd>70||trkOnBridge(px,py)){Lm.x=px;Lm.y=py;continue}const d0=Lm.d;
+    if(tk)trkStroke(Lm.x,Lm.y,px,py,30,(x,L)=>trkTank(x,L,d0));
+    else{const f=dx*c+dy*s<0?-1:1;trkStroke(Lm.x,Lm.y,px,py,JTW,(x,L)=>trkTire(x,L,d0,kk,f))}
+    Lm.d+=dd;Lm.x=px;Lm.y=py}}
+  TRK.up-=dt;if(TRK.up<=0&&TRK.dirty.size){TRK.up=.15;for(const o of TRK.dirty)o.tx.needsUpdate=true;TRK.dirty.clear()}
+  // estompage : 5 % toutes les 5 s, tuile par tuile a des instants decales (pas de gros envoi de textures d'un coup)
+  for(const o of TRK.T.values()){if(!o.ink)continue;o.ft-=dt;if(o.ft>0)continue;o.ft+=5;const x=o.x;x.globalCompositeOperation='destination-out';x.fillStyle='rgba(0,0,0,.05)';x.fillRect(0,0,o.c.width,o.c.height);x.globalCompositeOperation='source-over';TRK.dirty.add(o)}}
  // ---------- mise a jour par image ----------
- function sync(dt,now){if(HEADLESS)return;const on=WARM()&&!(typeof menuOpen==='function'&&menuOpen());if(!on){if(G)G.visible=false;return}init();G.visible=true;
+ function sync(dt,now){if(HEADLESS)return;const on=WARM()&&!(typeof menuOpen==='function'&&menuOpen());if(!on){if(G)G.visible=false;if(VOI.size)enginesOff();return}init();G.visible=true;engines(dt);trkTick(dt);
   // vehicules
   while(VM.length<WV.length){const v=WV[VM.length],o=v.k==='tank'?tank(v.team):jeep(v.team);o.team=v.team;G.add(o.R);VM.push(o)}
   WV.forEach((v,i)=>{let o=VM[i];if(o.k!==v.k||o.team!==v.team){G.remove(o.R);o=VM[i]=v.k==='tank'?tank(v.team):jeep(v.team);o.team=v.team;G.add(o.R)}
@@ -8419,13 +8486,82 @@ const WVIS=(()=>{
  // radar : impulsion et echo
  function pingSnd(own){if(typeof AC==='undefined'||!AC||!WS)return;try{const t=AC.currentTime+.01,o=AC.createGain();o.gain.value=own?.5:.32;o.connect(WS);for(const[dl,g_]of[[0,.5],[.32,.22],[.64,.1]]){impTone(o,t+dl,'sine',own?1480:980,own?1420:940,.45,g_)}}catch(e){}}
  function banner(txt,col,dur){BAN.push({txt,col:col||'#fff',t0:performance.now(),d:dur||2400});if(BAN.length>3)BAN.shift()}
+ // ---------- sons des vehicules (continus, spatialises) ----------
+ // Moteurs : boucles generees (une fois) a partir d'explosions de cylindres : coup sourd, claquement du diesel, souffle d'echappement,
+ // irregularites d'un cylindre a l'autre (le grondement « qui tourne rond mais pas tout a fait »). Deux boucles par moteur (bas regime ;
+ // haut regime plus charge) en fondu enchaine, le regime fixe la vitesse de lecture. Tank : diesel lourd et turbo, grondement grave
+ // en roulant (pas de bruit de chenilles). 4x4 : V8 diesel, 4 rapports, pneus et gravier.
+ // Tourelle : petit moteur electrique. Volume global volontairement bas (les armes restent devant).
+ let VBUS=null,ENGB=null;const VOI=new Map(),VMAST=.42;
+ const nzB=()=>{if(!IMPN)impNoise();return IMPN};
+ function vbus(){if(VBUS)return VBUS;VBUS=AC.createGain();VBUS.gain.value=1;VBUS.connect(WS);try{document.addEventListener('visibilitychange',()=>{if(VBUS&&AC)VBUS.gain.setTargetAtTime(document.hidden?0:1,AC.currentTime,.05)})}catch(x){}return VBUS}
+ // boucle moteur : N cycles a 4 temps, cyl explosions par cycle, au regime de reference rpm
+ function genEng(tk,hi){const sr=AC.sampleRate,R=Math.random,cyl=tk?6:8,rpm=tk?(hi?1700:800):(hi?2600:800),cyc=120/rpm,N=tk?8:12,len=Math.round(sr*cyc*N),b=AC.createBuffer(1,len,sr),d=b.getChannelData(0);
+  const amp=[],off=[];for(let c=0;c<cyl;c++){amp.push(.7+R()*.6);off.push((R()-.5)*(tk?.08:.22))}   // V8 : intervalles irreguliers entre bancs
+  const per=cyc/cyl,f1=tk?44:82,f2=tk?120:230,f3=tk?380:640,s=hi?.7:1,t1=(tk?.04:.024)*s,t2=(tk?.018:.011)*s,t3=(tk?.009:.006)*s,kn=tk?(hi?1.9:1.2):(hi?1.2:.75),ex=tk?(hi?.7:.45):(hi?.9:.55),te=tk?.05:.035,L=Math.round(sr*(tk?.14:.09));
+  for(let n=0;n<N;n++)for(let c=0;c<cyl;c++){const t0=n*cyc+(c+off[c]+(R()-.5)*.03)*per,i0=Math.round(t0*sr),a=amp[c]*(.88+R()*.24),g1=f1*(.94+R()*.12),g2=f2*(.92+R()*.16),ph=R()*6.28;let lp=0,lp2=0;
+   for(let k=0;k<L;k++){const t=k/sr,z=R()*2-1;lp+=(z-lp)*.25;lp2+=(z-lp2)*.04;
+    d[(i0+k)%len]+=a*(.6*Math.exp(-t/t1)*Math.sin(6.2832*g1*t)+.9*Math.exp(-t/t2)*Math.sin(6.2832*g2*t+ph)+.4*Math.exp(-t/t3)*Math.sin(6.2832*f3*t*(.95+.1*(c%3)/2)+ph*2)+kn*Math.exp(-t/.005)*(z-lp)+ex*Math.exp(-t/te)*lp2*3)}}
+  // passe-haut (pas d'infra-basse), deux passages pour que la boucle reste sans raccord, puis normalisation
+  let y=0,xp=d[len-1];for(let p=0;p<2;p++)for(let i=0;i<len;i++){const x=d[i];y=.993*(y+x-xp);xp=x;if(p)d[i]=y}
+  let pk=0;for(let i=0;i<len;i++)pk=Math.max(pk,Math.abs(d[i]));for(let i=0;i<len;i++)d[i]/=pk||1;b.rpm=rpm;return b}
+ // gravier sous les pneus : petits craquements
+ function genGrit(){const sr=AC.sampleRate,R=Math.random,len=Math.round(sr*.05),b=AC.createBuffer(1,len,sr),d=b.getChannelData(0);let xp=0;for(let j=0;j<5;j++){const i0=Math.round(R()*len*.7),a=.4+R()*.6;for(let k=0;k<len*.25;k++){const x=(R()*2-1)*a*Math.exp(-k/(sr*.003));const i=i0+k;if(i<len)d[i]+=x-xp*.6;xp=x}}return b}
+ function engBufs(){if(ENGB&&ENGB.sr===AC.sampleRate)return ENGB;return ENGB={sr:AC.sampleRate,tank:[genEng(1,0),genEng(1,1)],jeep:[genEng(0,0),genEng(0,1)],grit:[0,1,2].map(genGrit)}}
+ function voice(v){const tk=v.k==='tank',t=AC.currentTime,B=engBufs(),O={src:[],tk},gn=g=>{const n=AC.createGain();n.gain.value=g;return n},fl=(ty,f,Q)=>{const b=AC.createBiquadFilter();b.type=ty;b.frequency.value=f;b.Q.value=Q||.7;return b},
+   loop=(buf,r)=>{const n=AC.createBufferSource();n.buffer=buf;n.loop=true;n.playbackRate.value=r||1;O.src.push(n);return n},osc=(ty,f)=>{const o=AC.createOscillator();o.type=ty;o.frequency.value=f;O.src.push(o);return o};
+  O.out=gn(0);O.pn=AC.createStereoPanner?AC.createStereoPanner():null;if(O.pn){O.out.connect(O.pn);O.pn.connect(vbus())}else O.out.connect(vbus());
+  // moteur : deux boucles (bas / haut regime) -> passe-haut -> passe-bas qui s'ouvre avec le regime
+  O.eng=gn(0);const hp=fl('highpass',tk?40:60,.7);O.lp=fl('lowpass',1500,.5);hp.connect(O.lp);O.lp.connect(O.eng);O.eng.connect(O.out);
+  const E_=B[tk?'tank':'jeep'];O.lo=loop(E_[0]);O.hi=loop(E_[1]);O.gLo=gn(1);O.gHi=gn(0);O.lo.connect(O.gLo);O.hi.connect(O.gHi);O.gLo.connect(hp);O.gHi.connect(hp);
+  if(tk){O.tb=osc('sine',2600);O.tbg=gn(0);O.tb.connect(O.tbg);O.tbg.connect(O.out);const hn=loop(nzB(),1),hb=fl('bandpass',4200,1.2);O.tbn=gn(0);hn.connect(hb);hb.connect(O.tbn);O.tbn.connect(O.out);
+   const rn=loop(nzB(),.5),rb=fl('lowpass',150,.7);O.rg=gn(0);rn.connect(rb);rb.connect(O.rg);O.rg.connect(O.out)}
+  else{const tn=loop(nzB(),.8),tl=fl('lowpass',420,.7);O.tire=gn(0);tn.connect(tl);tl.connect(O.tire);O.tire.connect(O.out)}
+  O.to=osc('triangle',tk?220:420);const tf=fl('lowpass',900,.7);O.tgn=gn(0);O.to.connect(tf);tf.connect(O.tgn);O.tgn.connect(O.out);
+  for(const s of O.src){try{s.start(t,s.buffer?Math.random()*s.buffer.duration:0)}catch(x){s.start(t)}}
+  O.rpm=.1;O.on=0;O.gear=0;O.rel=v.ta-v.a;O.pa=v.a;O.pv=Math.abs(v.v||0);O.q=0;O.u=1;O.nc=t;O.ng=t;return O}
+ function voiceKill(O){if(!AC)return;const t=AC.currentTime;try{O.out.gain.cancelScheduledValues(t);O.out.gain.setTargetAtTime(0,t,.08)}catch(x){}setTimeout(()=>{for(const s of O.src)try{s.stop()}catch(x){}try{O.out.disconnect()}catch(x){}},600)}
+ function enginesOff(){for(const[k,O]of VOI)voiceKill(O);VOI.clear()}
+ // un son ponctuel dans la voix d'un vehicule (gravier)
+ function grain(O,buf,at,g,rate){const n=AC.createBufferSource();n.buffer=buf;n.playbackRate.value=rate||1;const a=AC.createGain();a.gain.value=g;n.connect(a);a.connect(O.out);n.start(at);n.stop(at+buf.duration/(rate||1)+.02)}
+ // demarreur (moteur electrique qui patine) puis le diesel qui prend
+ function starter(O,tk){const t=AC.currentTime+.01,o=AC.createOscillator(),g=AC.createGain(),f0=tk?95:140;o.type='sawtooth';for(let k=0;k<8;k++)o.frequency.setValueAtTime(f0*(k%2?1.12:.9),t+k*.06);g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.07,t+.03);g.gain.setValueAtTime(.07,t+.42);g.gain.exponentialRampToValueAtTime(.001,t+.52);
+  const f=AC.createBiquadFilter();f.type='lowpass';f.frequency.value=700;o.connect(f);f.connect(g);g.connect(O.out);o.start(t);o.stop(t+.56);O.rpm=.5}
+ // passage de rapport : petit claquement metallique, le regime retombe
+ function shift(O){const t=AC.currentTime+.005,n=AC.createBufferSource();n.buffer=nzB();const bp=AC.createBiquadFilter();bp.type='bandpass';bp.frequency.value=900;bp.Q.value=2;const g=AC.createGain();g.gain.setValueAtTime(.12,t);g.gain.exponentialRampToValueAtTime(.001,t+.07);n.connect(bp);bp.connect(g);g.connect(O.out);n.start(t);n.stop(t+.09);O.rpm*=.7}
+ function engines(dt){if(typeof AC==='undefined'||!AC||!WS)return;try{const t=AC.currentTime,me=E&&E[localSlot],live=WARM()&&st.s!=='end'&&st.s!=='over',R=Math.random;
+  for(const v of WV){let O=VOI.get(v.i);const tk=v.k==='tank',P=WP(v),inside=!!(me&&me.alive&&me.wv===v.i),d=inside?0:Math.hypot(v.x-CP.x,v.y-CP.y),Rr=tk?1400:1100,
+    vol=!live||v.st||v.x===undefined?0:(inside?1:Math.pow(Math.max(0,1-d/Rr),2)),run=v.drv>=0||Math.abs(v.v||0)>3;
+   if(!O){if(vol>.02&&run&&!v.st){O=voice(v);VOI.set(v.i,O)}else continue}
+   O.q=vol<.008||!(run||O.rpm>.05)?O.q+dt:0;if(O.q>1.5||v.st||!live){voiceKill(O);VOI.delete(v.i);continue}
+   const sp=Math.abs(v.v||0),s=Math.min(1,sp/P.sp),B=ENGB;
+   // 4x4 : craquements de gravier sous les pneus (le tank n'a plus de bruit de chenilles)
+   if(sp>4&&!tk){if(O.nc<t)O.nc=t+.01;const rate=6+sp*.08;while(O.nc<t+.12){grain(O,B.grit[R()*B.grit.length|0],O.nc,.09*s*(.5+R()*.6),.8+R()*.5);O.nc+=1/rate*(.6+R()*.8)}}else O.nc=t;
+   O.u+=dt;if(O.u<.05)continue;const du=O.u;O.u=0;
+   const acc=(sp-O.pv)/du;O.pv=sp;const thr=Math.max(0,Math.min(1,acc/(tk?50:180)));let tr;
+   if(!run)tr=0;else if(tk)tr=.1+.62*s+.28*thr;else{const G=[0,.22,.45,.7,1.01];let gi=0;while(gi<3&&s>G[gi+1])gi++;if(gi!==O.gear){if(gi>O.gear&&vol>.05)shift(O);O.gear=gi}tr=sp<4?.08:.22+.6*(s-G[gi])/(G[gi+1]-G[gi])+.16*thr}
+   O.rpm+=(tr-O.rpm)*Math.min(1,du*(tk?2.2:4.5));const r=Math.max(0,Math.min(1.1,O.rpm)),on=run?1:0;if(on&&!O.on&&vol>.02)starter(O,tk);O.on=on;
+   const idle=700,mx=tk?2000:3300,rpm=idle+r*(mx-idle),b0=O.lo.buffer.rpm,b1=O.hi.buffer.rpm,x=Math.max(0,Math.min(1,(rpm-b0)/(b1-b0)*.8+thr*.35));
+   O.lo.playbackRate.setTargetAtTime(rpm/b0,t,.06);O.hi.playbackRate.setTargetAtTime(rpm/b1,t,.06);O.gLo.gain.setTargetAtTime(Math.cos(x*1.5708),t,.08);O.gHi.gain.setTargetAtTime(Math.sin(x*1.5708),t,.08);
+   O.lp.frequency.setTargetAtTime((tk?1900:2400)+(tk?3200:4800)*r,t,.08);O.eng.gain.setTargetAtTime(on?(tk?.5:.4)*(.55+.45*r):0,t,on?.08:.45);
+   O.out.gain.setTargetAtTime(VMAST*vol*(inside?.6:1),t,.08);if(O.pn)O.pn.pan.setTargetAtTime(inside?0:Math.max(-.8,Math.min(.8,(v.x-CP.x)/900*(FLIP?-1:1))),t,.08);
+   if(tk){O.tbg.gain.setTargetAtTime(on?.012*r*r:0,t,.12);O.tb.frequency.setTargetAtTime(1900+1800*r,t,.12);O.tbn.gain.setTargetAtTime(on?.02*r*(.4+thr):0,t,.1);
+    O.rg.gain.setTargetAtTime(.24*s,t,.1)}
+   else O.tire.gain.setTargetAtTime(.3*s,t,.1);
+   // tourelle : le moteur electrique tourne quand la tourelle bouge par rapport a la caisse
+   const rel=v.ta-v.a,dr=Math.abs(Math.atan2(Math.sin(rel-O.rel),Math.cos(rel-O.rel)))/du;O.rel=rel;const w=Math.min(1,dr/P.trt);O.tgn.gain.setTargetAtTime(w>.05?(tk?.05:.03)*w:0,t,.05);O.to.frequency.setTargetAtTime((tk?200:400)+(tk?90:160)*w,t,.05)}}catch(x){}}
+ // choc de la caisse contre un obstacle
+ function bumpSnd(x,y,tk){if(typeof AC==='undefined'||!AC||!WS)return;try{if(!IMPN)impNoise();const d=Math.hypot(x-CP.x,y-CP.y),v=Math.max(0,Math.min(1,1-d/1200));if(v<.05)return;const t=AC.currentTime+.01,o=AC.createGain();o.gain.value=.45*v;o.connect(WS);
+  impNz(o,t,.25,'lowpass',tk?160:240,.8,1.2,.003);impTone(o,t,'sine',tk?62:80,32,.3,.9);impNz(o,t+.01,.12,'bandpass',tk?700:1100,4,.45,.002);impTone(o,t+.02,'triangle',tk?310:420,tk?240:330,.35,.12)}catch(x){}}
  // ---------- effets des evenements ----------
  function fx(q){if(HEADLESS)return;init();const near=Math.hypot(q.x-CP.x,q.y-CP.y)<900,me=E&&E[localSlot],mt=me?me.team:0;
   if(q.k==='fire'){const o=VM[q.a];if(o)o.rc=1;glow(q.x,34,q.y,70,.12,0xfff2c0);smoke(q.x,30,q.y,34,0x6a6258,1.6,30,0);cannonSnd(q.x,q.y);if(near&&typeof gShake!=='undefined')gShake=Math.max(gShake,5)}
   else if(q.k==='sh'||q.k==='c4b'){fxBoom(q.x,q.y,0);if(WAR.shell)WAR.shell(q.x,q.y,near);if(q.a)for(let i=0;i<5;i++)glow(q.x+(Math.random()-.5)*30,20+Math.random()*20,q.y+(Math.random()-.5)*30,22,.2,0xffe090)}
-  else if(q.k==='tgd'){fxBoom(q.x,q.y,0);setTimeout(()=>{fxBoom(q.x+30,q.y-20,0)},180);for(let i=0;i<8;i++)smoke(q.x+(Math.random()-.5)*80,30,q.y+(Math.random()-.5)*50,50,0x221d18,3.5,80,20);const tg=WSt.tg[q.a];if(tg){const own=tg.team===mt;banner((tg.k+tg.n)+(own?LG(' détruite !',' destroyed!'):LG(' ennemie détruite !',' enemy destroyed!')),own?'#ff6a5a':'#7dff9a',2600)}}
+  else if(q.k==='tgd'){fxBoom(q.x,q.y,0);msBoomSnd(q.x,q.y);if(near&&typeof gShake!=='undefined')gShake=Math.max(gShake,14);setTimeout(()=>{fxBoom(q.x+30,q.y-20,0)},180);for(let i=0;i<8;i++)smoke(q.x+(Math.random()-.5)*80,30,q.y+(Math.random()-.5)*50,50,0x221d18,3.5,80,20);const tg=WSt.tg[q.a];if(tg){const own=tg.team===mt;banner((tg.k+tg.n)+(own?LG(' détruite !',' destroyed!'):LG(' ennemie détruite !',' enemy destroyed!')),own?'#ff6a5a':'#7dff9a',2600)}}
+  else if(q.k==='vx'){fxBoom(q.x,q.y,0);setTimeout(()=>fxBoom(q.x+(Math.random()-.5)*50,q.y+(Math.random()-.5)*50,0),90);msBoomSnd(q.x,q.y);for(let i=0;i<6;i++){smoke(q.x+(Math.random()-.5)*60,30,q.y+(Math.random()-.5)*60,56,0x1e1a16,3.6,80,18);glow(q.x+(Math.random()-.5)*50,20+Math.random()*30,q.y+(Math.random()-.5)*50,46,.35,0xffb060)}if(near&&typeof gShake!=='undefined')gShake=Math.max(gShake,12)}
+  else if(q.k==='vb'){const v=WV[q.a];bumpSnd(q.x,q.y,v&&v.k==='tank');for(let i=0;i<3;i++)smoke(q.x+(Math.random()-.5)*30,8,q.y+(Math.random()-.5)*30,22,0x6a604e,1.4,30,0)}
   else if(q.k==='jh'){for(let i=0;i<4;i++)glow(q.x+(Math.random()-.5)*50,30,q.y+(Math.random()-.5)*40,20,.15,0xfff0a0)}
-  else if(q.k==='jd'){fxBoom(q.x,q.y,0);const v=WV[q.a];if(v)banner(v.team===mt?LG('Votre 4x4 est détruit','Your 4x4 is destroyed'):LG('4x4 ennemi détruit','Enemy 4x4 destroyed'),v.team===mt?'#ff8a6a':'#7dff9a')}
+  else if(q.k==='jd'){fxBoom(q.x,q.y,0);msBoomSnd(q.x,q.y);for(let i=0;i<8;i++)smoke(q.x+(Math.random()-.5)*60,30,q.y+(Math.random()-.5)*50,50,0x221d18,3.4,70,16);if(near&&typeof gShake!=='undefined')gShake=Math.max(gShake,12);const v=WV[q.a];if(v)banner(v.team===mt?LG('Votre 4x4 est détruit','Your 4x4 is destroyed'):LG('4x4 ennemi détruit','Enemy 4x4 destroyed'),v.team===mt?'#ff8a6a':'#7dff9a')}
   else if(q.k==='c4'){if(near)beep(1600,2,.1)}
   else if(q.k==='arm'){beep(2000,4,.16,.1);banner(LG('Pont piégé : explosion dans 8 s !','Bridge rigged: blast in 8 s!'),'#ffb03a',2800)}
   else if(q.k==='brg'){const b=(wDeco().bridges||[])[q.a];if(b){for(let i=0;i<4;i++)setTimeout(()=>fxBoom(b.x0+(b.x1-b.x0)*(i+.5)/4,b.y+(Math.random()-.5)*40,0),i*140);for(let i=0;i<10;i++)smoke(b.x0+Math.random()*(b.x1-b.x0),20,b.y+(Math.random()-.5)*80,60,0x6a6258,4,60,10)}if(WAR.bridge)WAR.bridge(q.a,1);if(typeof gShake!=='undefined')gShake=Math.max(gShake,near?20:6);banner(LG('Pont détruit !','Bridge destroyed!'),'#ffb03a',2600)}
@@ -8552,7 +8688,7 @@ const WVIS=(()=>{
   for(const t of[0,1]){const r=(WSt.rv[t]||0)-T;if(!(r>0))continue;const q=WSt.tg.find(q=>q.team===t&&q.k==='A');const col=t===mt?'#7dff9a':'#ff5a3a';
    if(q){const k=((W_REV-r)%1.25)/1.25;g.globalAlpha=1-k;g.strokeStyle=col;g.lineWidth=5/MM;g.beginPath();g.arc(q.x+q.w/2,q.y+q.h/2,80+k*1600,0,7);g.stroke();g.globalAlpha=1}
    if(t===mt)for(const f of E){if(!f.alive||f.team===mt)continue;g.strokeStyle='#ff4a2a';g.lineWidth=4/MM;g.beginPath();g.arc(f.x,f.y,70+30*Math.abs(Math.sin(now/160)),0,7);g.stroke()}}}
- return{sync,fx,hud,chip,intro,result,mini,camK:()=>ck,hide:()=>{if(G)G.visible=false}}})();
+ return{sync,fx,hud,chip,intro,result,mini,camK:()=>ck,hide:()=>{if(G)G.visible=false},mf:(x,y)=>{if(HEADLESS)return;init();glow(x,67,y,30,.06,0xffe2a0)},snd:engines}})();
 function wFx(q){WVIS.fx(q)}
 // mitrailleuse lourde du 4x4 : detonation grave et puissante, claquement supersonique, culasse mecanique, roulement d'echo, douilles qui tintent
 let WMG_N=0;
@@ -8590,7 +8726,7 @@ BM.forEach((m,i)=>m.opacity=E.some(e=>e.team==0&&e.alive&&e.bush==i)?.4:1);
 for(const e of E){const m=e.m,v=ZMB()||e.team==mt||(e.body&&!e.alive)||T-e.vt<.7||!anyB||st.s==='over';m.grp.visible=v;e._vis=v;const lb=LBL[e.id];lb.visible=false;if(!v)continue;
  {let px=e.x,py=e.y;if(e.sco===1){const s=SC[e.scI];if(s){px=s.x+Math.cos(s.a)*40;py=s.y+Math.sin(s.a)*40}}let zh=0;if(e.zl)zh=zipY(e);else{const zt=e.zyv||0;e.zyS=zt>0||e.zyS>.5?(e.zyS||0)+(zt-(e.zyS||0))*Math.min(1,(gdt||.016)*18):0;zh=e.zyS>.5?e.zyS:0}m.grp.position.set(px,zh||(e.wv>=0?wSeatY(e):(e.sco===2?24:(e.sco?12:0))),py)}if(e.alive&&e.id!==localSlot&&st.s!=='end'&&(!ZMB()||e.team===mt)){const k=CH_/750;setLabel(lb,NM[e.id]||'',e.team==mt,e.boost&&e.team==mt,CUR.theme!=='nuit'?TD(e.team).css:null);lb.visible=true;lb.position.set(e.x,72,e.y);lb.scale.set(80*k,20*k,1)}m.b.visible=!((e.moto||e.sco===1||(e.wv>=0&&e.ws===0))&&e.alive);m.b.rotation.y=-e.ang;m.b.rotation.z=e.alive?0:1.5;m.b.position.y=e.alive?0:8;
  const sw=e.alive?Math.sin(e.ph)*.7*Math.min(1,e.mvn||0):0;m.l1.rotation.z=sw;m.l2.rotation.z=-sw;
- m.fl.visible=e.fT>0;m.pk.visible=!!(e.alive&&e.id===bomb.car&&e.team==mt&&!bomb.planted);m.pl.visible=true;m.hp.visible=m.rg.visible=!!e.alive&&e.sco!==1;{const car=!!(e.alive&&((e.id===bomb.car&&e.team==mt&&!bomb.planted)||(HACKM()&&HK.bc.st===2&&HK.bc.car===e.id))),on=car?(CUR.theme==='desert'?0xff2a2a:0xffc83c):0;if(on!==m.rgOn){m.rgOn=on;m.rg.material.color.setHex(on||m.rc)}}m.hp.scale.x=Math.max(.01,e.hp/(e.maxhp||BASE_HP))}
+ m.fl.visible=e.fT>0;if(m.gn){const iv=WARM()&&(e.wv>=0||e.wl>=0);m.gn.visible=!iv;if(iv)m.fl.visible=false}m.pk.visible=!!(e.alive&&e.id===bomb.car&&e.team==mt&&!bomb.planted);m.pl.visible=true;m.hp.visible=m.rg.visible=!!e.alive&&e.sco!==1;{const car=!!(e.alive&&((e.id===bomb.car&&e.team==mt&&!bomb.planted)||(HACKM()&&HK.bc.st===2&&HK.bc.car===e.id))),on=car?(CUR.theme==='desert'?0xff2a2a:0xffc83c):0;if(on!==m.rgOn){m.rgOn=on;m.rg.material.color.setHex(on||m.rc)}}m.hp.scale.x=Math.max(.01,e.hp/(e.maxhp||BASE_HP))}
 motoDraw(Math.min(.05,gdt||.016),mt);
 for(const b of B){boltLook(b);b.m.position.set(b.x,26,b.y);b.m.rotation.y=-Math.atan2(b.vy,b.vx)}
 cone.visible=!ZMB()&&!(c.wv>=0)&&!!c.alive&&(st.s==='live'||st.s==='freeze');cm.material.opacity=NEO()?.03:.07;cone.position.set(c.x,1.5,c.y);cone.rotation.y=-c.ang;
