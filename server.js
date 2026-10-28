@@ -30,8 +30,15 @@ const MAP_SIZE = {
   neige: 6,  // Base Polaire : 6v6, mode Code Rouge
   neigeN: 6,  // Base Polaire de nuit (meme carte, ambiance nocturne)
   foret: 5,   // Foret : mode Zombie, 5 equipes de 2 (10 places)
-  guerre: 8   // Front : carte de guerre, 8v8
+  guerre: 10  // Front : carte de guerre, 10v10
 };
+// Front : la taille d'equipe est relue dans index.html (le fichier que la simulation execute) :
+// le serveur et le jeu ne peuvent plus diverger, meme si seul index.html a ete mis a jour.
+try {
+  const html = require('fs').readFileSync(require('path').join(__dirname, 'index.html'), 'utf8');
+  const mm = /MAPS\.guerre=\(\(\)=>\{const m=\{[\s\S]{0,20000}?"TS":(\d+)/.exec(html);
+  if (mm && +mm[1] >= 2 && +mm[1] <= 16) MAP_SIZE.guerre = +mm[1];
+} catch (e) {}
 // nombre d'equipes : 2 partout, 5 sur la Foret (mode Zombie)
 const NTEAMS = room => (room.map === 'foret' ? 5 : 2);
 
