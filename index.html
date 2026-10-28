@@ -3020,7 +3020,7 @@ function netMessage(m){
 function renderLobby(){
  $('roomCode').textContent=netRoomCode;if(netMap==='foret'){zLobby();return}
  const sn=/^neige/.test(netMap),row=slot=>{const p=netPlayers.find(x=>x.slot===slot);return '<div class="player '+(slot<netSize?(netMap==='desert'?'bo':(netMap==='neon'?'sp':(sn?'bz':'blue'))):(netMap==='desert'?'vp':(netMap==='neon'?'vo':(sn?'kd':'red'))))+'">'+(p?(p.name+(p.host?' 👑':'')+(p.id===netPlayerId?' (toi)':'')):'<span style="opacity:.55">IA</span>')+(p&&p.id===netPlayerId?'':'')+'</div>'};
- $('players').innerHTML='<div class="small" style="margin-bottom:8px">CARTE : '+(netMap==='desert'?'DÉSERT · 4 contre 4':(netMap==='neon'?'NEON GRID · 4 contre 4':(netMap==='neige'?'BASE POLAIRE · JOUR · 6 contre 6':(netMap==='neigeN'?'BASE POLAIRE · NUIT · 6 contre 6':(netMap==='guerre'?'FRONT · 10 contre 10':'NUIT · 3 contre 3')))))+'</div><div class="small" style="margin:-4px 0 8px;opacity:.75">'+(netGM==='tdm'?'Match à mort par équipe · 10 min max':(netMap==='neon'?'Zones · premier à 300 points':(/^neige/.test(netMap)?'Code Rouge · premier à 4 manches':'Bombe · manches')))+'</div><div class="small">'+(netMap==='desert'?'BLACK OPS':(netMap==='neon'?'SPECTRES':(sn?'BLIZZARD':(netMap==='guerre'?'ACIER':'ÉQUIPE BLEUE'))))+'</div>'+[...Array(netSize).keys()].map(row).join('')+'<div class="small" style="margin-top:12px">'+(netMap==='desert'?'VIPERS':(netMap==='neon'?'VOLT':(sn?'KODIAK':(netMap==='guerre'?'CENDRE':'ÉQUIPE ROUGE'))))+'</div>'+[...Array(netSize).keys()].map(i=>row(i+netSize)).join('');
+ $('players').innerHTML=(netMap==='guerre'&&typeof MAPS!=='undefined'&&MAPS.guerre&&netSize&&netSize!==MAPS.guerre.TS?'<div class="small" style="color:#ff8a6a;margin-bottom:8px;line-height:1.35">⚠ '+LG('Serveur pas à jour : il joue le Front à '+netSize+' contre '+netSize+' alors que le jeu est à '+MAPS.guerre.TS+' contre '+MAPS.guerre.TS+'. Redéploie server.js et index.html sur Fly : sinon les équipes sont mélangées.','Server out of date: it runs the Front at '+netSize+' vs '+netSize+' but the game is '+MAPS.guerre.TS+' vs '+MAPS.guerre.TS+'. Redeploy server.js and index.html on Fly, otherwise teams get mixed up.')+'</div>':'')+'<div class="small" style="margin-bottom:8px">CARTE : '+(netMap==='desert'?'DÉSERT · 4 contre 4':(netMap==='neon'?'NEON GRID · 4 contre 4':(netMap==='neige'?'BASE POLAIRE · JOUR · 6 contre 6':(netMap==='neigeN'?'BASE POLAIRE · NUIT · 6 contre 6':(netMap==='guerre'?'FRONT · 10 contre 10':'NUIT · 3 contre 3')))))+'</div><div class="small" style="margin:-4px 0 8px;opacity:.75">'+(netGM==='tdm'?'Match à mort par équipe · 10 min max':(netMap==='neon'?'Zones · premier à 300 points':(/^neige/.test(netMap)?'Code Rouge · premier à 4 manches':(netMap==='guerre'?LG('Escorte du tank · premier à 4 manches','Tank escort · first to 4 rounds'):'Bombe · manches'))))+'</div><div class="small">'+(netMap==='desert'?'BLACK OPS':(netMap==='neon'?'SPECTRES':(sn?'BLIZZARD':(netMap==='guerre'?'ACIER':'ÉQUIPE BLEUE'))))+'</div>'+[...Array(netSize).keys()].map(row).join('')+'<div class="small" style="margin-top:12px">'+(netMap==='desert'?'VIPERS':(netMap==='neon'?'VOLT':(sn?'KODIAK':(netMap==='guerre'?'CENDRE':'ÉQUIPE ROUGE'))))+'</div>'+[...Array(netSize).keys()].map(i=>row(i+netSize)).join('');
  const me=netPlayers.find(p=>p.id===netPlayerId);
  $('teamBtn').classList.toggle('hidden',!me);
  const ready=netPlayers.length>=1;$('startBtn').classList.toggle('hidden',!(isHost&&ready));
@@ -8774,7 +8774,7 @@ const WVIS=(()=>{
  // ---------- sons ----------
  function cannonSnd(x,y){if(typeof AC==='undefined'||!AC||!WS)return;try{if(!IMPN)impNoise();const d=Math.hypot(x-CP.x,y-CP.y),v=Math.max(.05,Math.min(1,1-d/2600)),t=AC.currentTime+.01,o=AC.createGain();o.gain.value=.75*v;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=600+5000*v*v;o.connect(lp);sndPan(lp,x-CP.x,700);
   impNz(o,t,.06,'highpass',900,.7,.5,.002);impNz(o,t,.9,'lowpass',160,.8,.6,.005);impTone(o,t,'sine',70,32,.7,.5)}catch(e){}}
- function beep(f,n,gap,vol){if(typeof AC==='undefined'||!AC||!WS)return;try{for(let i=0;i<(n||1);i++){const t=AC.currentTime+.01+i*(gap||.12),os=AC.createOscillator(),g2=AC.createGain();os.type='square';os.frequency.value=f;g2.gain.setValueAtTime(.0001,t);g2.gain.linearRampToValueAtTime(vol||.08,t+.005);g2.gain.exponentialRampToValueAtTime(.0001,t+.07);os.connect(g2);g2.connect(WS);os.start(t);os.stop(t+.08)}}catch(e){}}
+ function beep(f,n,gap,vol){if(typeof AC==='undefined'||!AC||!WS)return;try{CUE=AC.currentTime+(n||1)*(gap||.12);for(let i=0;i<(n||1);i++){const t=AC.currentTime+.01+i*(gap||.12),os=AC.createOscillator(),g2=AC.createGain();os.type='square';os.frequency.value=f;g2.gain.setValueAtTime(.0001,t);g2.gain.linearRampToValueAtTime(vol||.08,t+.005);g2.gain.exponentialRampToValueAtTime(.0001,t+.07);os.connect(g2);g2.connect(WS);os.start(t);os.stop(t+.08)}}catch(e){}}
  // depart du missile : allumage, souffle qui monte, grondement
  function msSnd(x,y){if(typeof AC==='undefined'||!AC||!WS)return;try{if(!IMPN)impNoise();const d=Math.hypot(x-CP.x,y-CP.y),v=Math.max(.12,Math.min(1,1-d/3200)),t=AC.currentTime+.01,o=AC.createGain();o.gain.value=.8*v;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900+6000*v;o.connect(lp);sndPan(lp,x-CP.x,900);
   impNz(o,t,.05,'highpass',1800,.7,.6,.002);impNz(o,t,.3,'lowpass',200,.8,1.4,.004);impTone(o,t,'sine',62,30,.6,.9);
@@ -8783,8 +8783,10 @@ const WVIS=(()=>{
  function msBoomSnd(x,y){if(typeof AC==='undefined'||!AC||!WS)return;try{if(!IMPN)impNoise();const d=Math.hypot(x-CP.x,y-CP.y),v=Math.max(.1,Math.min(1,1-d/3000)),t=AC.currentTime+.01,o=AC.createGain();o.gain.value=.9*v;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=700+5000*v;o.connect(lp);sndPan(lp,x-CP.x,900);
   impNz(o,t,.08,'highpass',1100,.7,.7,.002);impNz(o,t,1.3,'lowpass',150,.8,1.3,.006);impTone(o,t,'sine',58,24,1.1,1.1);impNz(o,t+.12,.9,'lowpass',320,.7,.5,.02)}catch(e){}}
  // radar : impulsion et echo
- function pingSnd(own){if(typeof AC==='undefined'||!AC||!WS)return;try{const t=AC.currentTime+.01,o=AC.createGain();o.gain.value=own?.5:.32;o.connect(WS);for(const[dl,g_]of[[0,.5],[.32,.22],[.64,.1]]){impTone(o,t+dl,'sine',own?1480:980,own?1420:940,.45,g_)}}catch(e){}}
- function banner(txt,col,dur){BAN.push({txt,col:col||'#fff',t0:performance.now(),d:dur||2400});if(BAN.length>3)BAN.shift()}
+ function pingSnd(own){if(typeof AC==='undefined'||!AC||!WS)return;try{CUE=AC.currentTime+.6;const t=AC.currentTime+.01,o=AC.createGain();o.gain.value=own?.5:.32;o.connect(WS);for(const[dl,g_]of[[0,.5],[.32,.22],[.64,.1]]){impTone(o,t+dl,'sine',own?1480:980,own?1420:940,.45,g_)}}catch(e){}}
+ let CUE=-9;
+ function cue(k){if(typeof AC==='undefined'||!AC||!WS)return;try{const n=AC.currentTime;if(n-CUE<.35)return;CUE=n;const t=n+.01,o=AC.createGain();o.gain.value=.55;o.connect(WS);(k>0?[660,990]:(k<0?[700,440]:[880])).forEach((f,i)=>impTone(o,t+i*.11,'triangle',f,f,.16,.4))}catch(e){}}
+ function banner(txt,col,dur,ns){BAN.push({txt,col:col||'#fff',t0:performance.now(),d:dur||2400});if(BAN.length>3)BAN.shift();if(!ns&&!HEADLESS){const c=String(col||'').toLowerCase();cue(c==='#7dff9a'?1:(/^#ff[4-8]/.test(c)?-1:0))}}
  // ---------- sons des vehicules (continus, spatialises) ----------
  // Moteurs : boucles generees (une fois) a partir d'explosions de cylindres : coup sourd, claquement du diesel, souffle d'echappement,
  // irregularites d'un cylindre a l'autre (le grondement « qui tourne rond mais pas tout a fait »). Deux boucles par moteur (bas regime ;
@@ -8859,7 +8861,7 @@ const WVIS=(()=>{
   else if(q.k==='tgd'){fxBoom(q.x,q.y,0);msBoomSnd(q.x,q.y);if(near&&typeof gShake!=='undefined')gShake=Math.max(gShake,14);setTimeout(()=>{fxBoom(q.x+30,q.y-20,0)},180);for(let i=0;i<8;i++)smoke(q.x+(Math.random()-.5)*80,30,q.y+(Math.random()-.5)*50,50,0x221d18,3.5,80,20);const tg=WSt.tg[q.a];if(tg){const own=tg.team===mt;banner(own?(tg.k==='A'?LG('Votre antenne est détruite !','Your radar is destroyed!'):LG('Votre lance-missiles est détruit !','Your launcher is destroyed!')):(tg.k==='A'?LG('Antenne ennemie détruite !','Enemy radar destroyed!'):LG('Lance-missiles ennemi détruit !','Enemy launcher destroyed!')),own?'#ff6a5a':'#7dff9a',2600)}}
   else if(q.k==='vx'){fxBoom(q.x,q.y,0);setTimeout(()=>fxBoom(q.x+(Math.random()-.5)*50,q.y+(Math.random()-.5)*50,0),90);msBoomSnd(q.x,q.y);for(let i=0;i<6;i++){smoke(q.x+(Math.random()-.5)*60,30,q.y+(Math.random()-.5)*60,56,0x1e1a16,3.6,80,18);glow(q.x+(Math.random()-.5)*50,20+Math.random()*30,q.y+(Math.random()-.5)*50,46,.35,0xffb060)}if(near&&typeof gShake!=='undefined')gShake=Math.max(gShake,12)}
   else if(q.k==='fo'){const v=WV[q.a],mine=!!(me&&me.alive&&me.wv===q.a);if(typeof fuelOutSnd==='function')fuelOutSnd(mine?1:Math.max(0,1-Math.hypot(q.x-CP.x,q.y-CP.y)/1100)*.8,q.x-CP.x);smoke(q.x,22,q.y,26,0x3a3630,1.6,40,8);
-   if(mine)banner(LG('4x4 à sec ! Descends et combats','4x4 out of fuel! Get out and fight'),'#ffb347',3000);else if(v&&v.team===mt&&near)banner(LG('Un 4x4 allié est à sec','An allied 4x4 ran dry'),'#ffb347',2000)}
+   if(mine)banner(LG('4x4 à sec ! Descends et combats','4x4 out of fuel! Get out and fight'),'#ffb347',3000,1);else if(v&&v.team===mt&&near)banner(LG('Un 4x4 allié est à sec','An allied 4x4 ran dry'),'#ffb347',2000)}
   else if(q.k==='ej'){if(me&&q.a===me.id)banner(LG('Un coéquipier t’a fait sortir du véhicule (15 s sans y remonter)','A teammate pulled you out of the vehicle (15 s before getting back in)'),'#ffb347',3000)}
   else if(q.k==='px'){if(me&&q.a===me.id)banner(LG('L’ennemi t’a fait descendre du véhicule ! (8 s sans y remonter)','The enemy pulled you out of the vehicle! (8 s before getting back in)'),'#ff6a5a',3000);bumpSnd(q.x,q.y,false)}
   else if(q.k==='vb'){const v=WV[q.a];bumpSnd(q.x,q.y,v&&v.k==='tank');for(let i=0;i<3;i++)smoke(q.x+(Math.random()-.5)*30,8,q.y+(Math.random()-.5)*30,22,0x6a604e,1.4,30,0)}
@@ -8876,7 +8878,8 @@ const WVIS=(()=>{
   else if(q.k==='rv'){const own=q.a===mt,col=own?0x7dff9a:0xff5a3a;for(let i=0;i<3;i++)ring(q.x,q.y,col,i*.4);pingSnd(own);banner(own?LG('Antenne : ennemis révélés pendant 5 s','Radar: enemies revealed for 5 s'):LG('Repérés par l’antenne ennemie !','Spotted by the enemy radar!'),own?'#7dff9a':'#ff5a3a',2800)}}
  // ---------- ATH ----------
  // couleurs relatives : bleu = votre camp, rouge = l'ennemi (partout dans le mode Front)
- const AC='#5ab4ff',EC='#ff4a3a',enemyC=EC,tgName=q=>q.k+q.n;
+ const ALLYC='#5ab4ff',ENEMC='#ff4a3a',   // (pas « AC » : ce nom est celui du contexte audio, le masquer coupait tous les sons du Front)
+enemyC=ENEMC,tgName=q=>q.k+q.n;
  const tgNm=(q,own)=>q.k==='A'?(own?LG('VOTRE ANTENNE','YOUR RADAR'):LG('ANTENNE ENNEMIE','ENEMY RADAR')):(own?LG('VOTRE LANCE-MISSILES','YOUR LAUNCHER'):LG('LANCE-MISSILES ENNEMI','ENEMY LAUNCHER'));
  const tgOf=q=>q.k==='A'?LG('l’antenne','the radar'):LG('le lance-missiles','the launcher');
  // icones vectorielles (s = taille en px) : A antenne, B lance-missiles, T tank, J 4x4, X viseur
@@ -8914,25 +8917,25 @@ const WVIS=(()=>{
  function hud(hm,mt){if(st.s==='end'||st.s==='over'){EDG=[];return}const now=performance.now(),D=wDeco(),onS=(x,y)=>x>-40&&y>-40&&x<W+40&&y<H+40,lab_=st.s!=='freeze',
    topF=(x0,y0,w)=>{g.globalAlpha=typeof HUDTOPR!=='undefined'&&HUDTOPR&&HUDTOPR[3]>0&&y0<HUDTOPR[3]&&x0+w>HUDTOPR[0]&&x0<HUDTOPR[2]?.28:1};   // pas d'etiquettes sous la carte d'intro ; estompees sous le haut de l'ATH
   // cibles : nom clair (VOTRE ANTENNE / ANTENNE ENNEMIE), icone, barre de vie ; etat de son missile / de son antenne ; fleche au bord pour les cibles ennemies
-  for(const q of WSt.tg){const cx=q.x+q.w/2,cy=q.y+q.h/2,[x,y]=wscr(cx,cy,110),own=q.team===mt,col=own?AC:EC;
+  for(const q of WSt.tg){const cx=q.x+q.w/2,cy=q.y+q.h/2,[x,y]=wscr(cx,cy,110),own=q.team===mt,col=own?ALLYC:ENEMC;
    if(onS(x,y)&&lab_){const dd=!!q.dead,nm=dd?(q.k==='A'?LG('ANTENNE DÉTRUITE','RADAR DESTROYED'):LG('LANCE-MISSILES DÉTRUIT','LAUNCHER DESTROYED')):tgNm(q,own);
     g.font='800 12px system-ui';const en=!own&&!dd,w=g.measureText(nm).width+(en?48:40),h=24,x0=x-w/2,y0=y-38;topF(x0,y0,w);
     pill(x0,y0,w,h,12,dd?'rgba(20,22,26,.8)':'rgba(8,12,22,.86)');if(!dd)frameR(x0,y0,w,h,12,hexA(col,.9),1.6);badge(q.k,x0+(en?15:12),y0+12,10,col,en,dd);txt(nm,x0+(en?35:27),y0+12.5,12,dd?'rgba(255,255,255,.5)':(own?'#e6f2ff':'#ffd9d4'),'left',800);
     if(!dd){hpBar(x,y0+h+6,74,q.hp,W_TGHP,col);
      if(own){const L=q.k==='B'?wMsLeft(mt):wSatLeft(mt),rd=L<=0,rv=q.k==='A'&&WSt.rv[mt]>T,s_=q.k==='B'?(rd?LG('MISSILE PRÊT','MISSILE READY'):LG('missile dans ','missile in ')+fmtT(L)):(rv?LG('ENNEMIS RÉVÉLÉS','ENEMIES REVEALED'):(rd?LG('ANTENNE PRÊTE','RADAR READY'):LG('antenne dans ','radar in ')+fmtT(L)));
       txt(s_,x,y0+h+22,10.5,rd||rv?'#7dff9a':'rgba(255,255,255,.62)',null,800)}}g.globalAlpha=1}
-   else if(!onS(x,y)&&!own&&!q.dead&&hm&&hm.alive&&st.s==='live')edge(x,y,EC,'',[q.k])}
+   else if(!onS(x,y)&&!own&&!q.dead&&hm&&hm.alive&&st.s==='live')edge(x,y,ENEMC,'',[q.k])}
   // vehicules : allies = icone + places (et blindage / essence du 4x4), ennemis = chevron rouge (+ blindage du 4x4)
-  for(const v of WV){if(v.x===undefined)continue;const[x,y]=wscr(v.x,v.y,v.k==='tank'?112:90),own=v.team===mt,col=own?AC:EC;
+  for(const v of WV){if(v.x===undefined)continue;const[x,y]=wscr(v.x,v.y,v.k==='tank'?112:90),own=v.team===mt,col=own?ALLYC:ENEMC;
    if(onS(x,y)){if(!lab_)continue;topF(x-30,y-56,60);
     if(v.st){if(own&&v.k==='jeep'){const r=Math.max(0,Math.ceil(v.rsp-T));if(r>0){g.font='800 11px system-ui';const t_=LG('retour dans ','back in ')+r+' s',w=g.measureText(t_).width+34;pill(x-w/2,y-11,w,22,11,'rgba(8,12,22,.8)');ico('J',x-w/2+13,y,15,'rgba(255,255,255,.6)');txt(t_,x-w/2+25,y+.5,11,'rgba(255,255,255,.75)','left',800)}}}
     else{const mine=hm&&hm.wv===v.i;
-     if(!own){chev(x,y-(v.k==='jeep'?12:4),EC);if(v.k==='jeep')hpBar(x,y,44,v.hp,WJP.hp,EC)}
-     else if(!mine){const tw=50,ty=v.k==='jeep'?y-30:y-12;pill(x-tw/2,ty,tw,20,10,'rgba(8,12,22,.84)');frameR(x-tw/2,ty,tw,20,10,hexA(AC,.75),1.2);ico(v.k==='tank'?'T':'J',x-tw/2+13,ty+10,16,AC);seats(x+5,ty+10,v,AC);
-      if(v.k==='jeep'){hpBar(x,y-4,44,v.hp,WJP.hp,AC);const f=Math.max(0,Math.min(1,(v.fu??W_FMAX)/W_FMAX));pill(x-24,y+6,48,7,3,'rgba(8,12,22,.82)');if(f>0){g.fillStyle=f<.25?'#ffb347':'#ffd23a';g.fillRect(x-22,y+8,44*f,3)}}}
+     if(!own){chev(x,y-(v.k==='jeep'?12:4),ENEMC);if(v.k==='jeep')hpBar(x,y,44,v.hp,WJP.hp,ENEMC)}
+     else if(!mine){const tw=50,ty=v.k==='jeep'?y-30:y-12;pill(x-tw/2,ty,tw,20,10,'rgba(8,12,22,.84)');frameR(x-tw/2,ty,tw,20,10,hexA(ALLYC,.75),1.2);ico(v.k==='tank'?'T':'J',x-tw/2+13,ty+10,16,ALLYC);seats(x+5,ty+10,v,ALLYC);
+      if(v.k==='jeep'){hpBar(x,y-4,44,v.hp,WJP.hp,ALLYC);const f=Math.max(0,Math.min(1,(v.fu??W_FMAX)/W_FMAX));pill(x-24,y+6,48,7,3,'rgba(8,12,22,.82)');if(f>0){g.fillStyle=f<.25?'#ffb347':'#ffd23a';g.fillRect(x-22,y+8,44*f,3)}}}
      if(own&&v.k==='jeep'&&(v.fu??1)<=0){g.font='900 11px system-ui';const rr=Math.max(0,Math.ceil(v.rsp-T)),t_=LG('À SEC','EMPTY')+(rr>0?LG(' · garage dans ',' · garage in ')+rr+' s':''),w=g.measureText(t_).width+16;pill(x-w/2,y-54,w,20,10,'rgba(150,70,10,.92)');txt(t_,x,y-43.5,11,'#fff',null,900)}
      if(v.k==='tank'&&v.imm>T){const r=Math.ceil(v.imm-T);g.font='800 12px system-ui';const t_=LG('IMMOBILISÉ ','DISABLED ')+r+' s',w=g.measureText(t_).width+18;pill(x-w/2,y+12,w,20,10,'rgba(120,30,20,.88)');txt(t_,x,y+22,12,'#fff',null,800)}}g.globalAlpha=1}
-   else if(own&&v.k==='tank'&&hm&&hm.alive&&hm.wv<0)edge(x,y,AC,'',['T'])}
+   else if(own&&v.k==='tank'&&hm&&hm.alive&&hm.wv<0)edge(x,y,ALLYC,'',['T'])}
   // ponts : charges posees, compte a rebours
   (D.bridges||[]).forEach((b,i)=>{const S=WSt.br[i];if(!S||S.st||!(S.c4>0))return;const[x,y]=wscr(b.x,b.y,40);if(!onS(x,y)){if(S.f>0&&hm&&hm.alive)edge(x,y,'#ffb03a','💥 '+Math.ceil(S.f));return}
    if(S.f>0){const p=.5+.5*Math.sin(now/90),r=26+p*4;g.beginPath();g.arc(x,y,r,0,7);g.fillStyle='rgba(150,30,10,.85)';g.fill();g.lineWidth=3;g.strokeStyle='#ffb03a';g.beginPath();g.arc(x,y,r,-Math.PI/2,-Math.PI/2+Math.PI*2*(S.f/W_BRF));g.stroke();txt(Math.ceil(S.f),x,y+1,20,'#fff',null,900)}
@@ -8982,12 +8985,12 @@ const WVIS=(()=>{
   txt(lk?(wIsTg(lk)?(lk.k==='A'?LG('Antenne ennemie','Enemy radar'):LG('Lance-missiles ennemi','Enemy launcher'))+LG(' → 2 cases de dégâts',' → 2 damage'):(lk.k==='tank'?LG('Tank ennemi → immobilisé 8 s','Enemy tank → disabled 8 s'):LG('4x4 ennemi → dégâts d’un obus','Enemy 4x4 → shell damage'))):LG('Aucune cible','No target'),x+14,y+35,12,'#fff','left',700)}
  // panneau du vehicule : place, rechargement du canon, etat du 4x4, aide
  function seatPanel(hm,v){const tk=v.k==='tank',pw=Math.min(W-30,320),ph=tk?52:70,x=W/2-pw/2,y=(typeof athTop!=='undefined'&&athTop>0?athTop:H-90)-ph-12;
-  pill(x,y,pw,ph,12,'rgba(8,12,22,.84)');frameR(x,y,pw,ph,12,hexA(AC,.6),1.2);
-  ico(tk?'T':'J',x+22,y+16,18,AC);txt((tk?'TANK':'4x4')+' · '+(hm.ws===0?LG('CONDUCTEUR','DRIVER'):(tk?LG('CANON','CANNON'):LG('MITRAILLEUSE','MACHINE GUN'))),x+38,y+16.5,12,AC,'left',800);
+  pill(x,y,pw,ph,12,'rgba(8,12,22,.84)');frameR(x,y,pw,ph,12,hexA(ALLYC,.6),1.2);
+  ico(tk?'T':'J',x+22,y+16,18,ALLYC);txt((tk?'TANK':'4x4')+' · '+(hm.ws===0?LG('CONDUCTEUR','DRIVER'):(tk?LG('CANON','CANNON'):LG('MITRAILLEUSE','MACHINE GUN'))),x+38,y+16.5,12,ALLYC,'left',800);
   if(IS_PC)txt((hm.ws===0&&(v.gun<0||wBot(v.gun))?LG('E : canon','E: gun'):LG('E : descendre','E: get out'))+LG(' · X : sortir',' · X: exit'),x+pw-14,y+16.5,11,'rgba(255,255,255,.55)','right',600);
   const lx=x+14,bx=x+96,bw=pw-110,row=(yy,lab,lc)=>txt(lab,lx,yy+3.5,10.5,lc||'rgba(255,255,255,.72)','left',700);
   if(tk){const yy=y+34,r=v.cd>0?1-v.cd/WTK.rl:1,im=v.imm>T;row(yy,im?LG('Immobilisé ','Disabled ')+Math.ceil(v.imm-T)+' s':(r>=1?LG('Canon prêt','Gun ready'):LG('Rechargement','Reloading')),im?'#ff8a6a':(r>=1?'#7dff9a':null));pill(bx,yy,bw,7,3.5,'rgba(255,255,255,.15)');pill(bx,yy,Math.max(4,bw*r),7,3.5,r>=1?'#7dff9a':'#ffb03a')}
-  else{let yy=y+34;row(yy,LG('Blindage','Armor'));for(let i=0;i<WJP.hp;i++){g.fillStyle=i<v.hp?AC:'rgba(255,255,255,.15)';g.fillRect(bx+i*(bw/WJP.hp),yy,bw/WJP.hp-4,7)}
+  else{let yy=y+34;row(yy,LG('Blindage','Armor'));for(let i=0;i<WJP.hp;i++){g.fillStyle=i<v.hp?ALLYC:'rgba(255,255,255,.15)';g.fillRect(bx+i*(bw/WJP.hp),yy,bw/WJP.hp-4,7)}
    yy=y+52;const f=Math.max(0,Math.min(1,(v.fu??W_FMAX)/W_FMAX)),lo=f<.25,dry=f<=0,col=dry?'#ff5a4a':(lo?'#ffb347':'#ffd23a'),bl=dry||lo&&Math.sin(performance.now()/180)>0;
    row(yy,dry?LG('À sec !','Empty!'):LG('Essence ','Fuel ')+Math.ceil(v.fu??W_FMAX)+' s',dry?'#ff8a7a':(lo?(bl?'#ffc070':'rgba(255,192,112,.7)'):null));pill(bx,yy,bw,7,3.5,'rgba(255,255,255,.15)');if(f>0)pill(bx,yy,Math.max(4,bw*f),7,3.5,col)}}
  // puce sous le score : vos cibles (a defendre) contre les cibles ennemies (a detruire) ; etat de votre missile et de votre antenne
@@ -8997,9 +9000,9 @@ const WVIS=(()=>{
   const tile=(q,x,col)=>{const d=!!q.dead;pill(x,0,tw,th,7,d?'rgba(34,36,40,.86)':'rgba(8,12,22,.86)');frameR(x,0,tw,th,7,d?'rgba(255,255,255,.18)':hexA(col,.85),1.4);ico(q.k,x+tw/2,11,15,d?'rgba(255,255,255,.3)':col);
    if(d){g.strokeStyle=hexA(col,.9);g.lineWidth=2.4;g.beginPath();g.moveTo(x+8,5);g.lineTo(x+tw-8,th-8);g.moveTo(x+tw-8,5);g.lineTo(x+8,th-8);g.stroke()}
    else{const sw=(tw-8-(W_TGHP-1))/W_TGHP;for(let i=0;i<W_TGHP;i++){g.fillStyle=i<q.hp?col:'rgba(255,255,255,.14)';g.fillRect(x+4+i*(sw+1),th-6,sw,3)}}};
-  const x1=-tot/2,x2=x1+W1+mid;mine.forEach((q,i)=>tile(q,x1+i*(tw+gp),AC));en.forEach((q,i)=>tile(q,x2+i*(tw+gp),EC));
+  const x1=-tot/2,x2=x1+W1+mid;mine.forEach((q,i)=>tile(q,x1+i*(tw+gp),ALLYC));en.forEach((q,i)=>tile(q,x2+i*(tw+gp),ENEMC));
   txt('VS',x1+W1+mid/2,th/2,10,'rgba(255,255,255,.45)',null,800);
-  txt(LG('À DÉFENDRE','DEFEND'),x1+W1/2,th+9,9.5,AC,null,800);txt(LG('À DÉTRUIRE ','DESTROY ')+kd+'/'+en.length,x2+W2/2,th+9,9.5,'#ff7a6a',null,800);
+  txt(LG('À DÉFENDRE','DEFEND'),x1+W1/2,th+9,9.5,ALLYC,null,800);txt(LG('À DÉTRUIRE ','DESTROY ')+kd+'/'+en.length,x2+W2/2,th+9,9.5,'#ff7a6a',null,800);
   const y3=th+19,hasB=mine.some(q=>q.k==='B'&&!q.dead),hasA=mine.some(q=>q.k==='A'&&!q.dead),mL=wMsLeft(mt),sL=wSatLeft(mt),rv=WSt.rv[mt]>T,sp=WSt.rv[1-mt]>T,
    it=[['B',!hasB?'—':(mL<=0?LG('PRÊT','READY'):fmtT(mL)),!hasB?'rgba(255,255,255,.4)':(mL<=0?'#7dff9a':'rgba(255,255,255,.85)')],['A',!hasA?'—':(rv?LG('RÉVÉLÉS ','REVEALED ')+Math.ceil(WSt.rv[mt]-T)+' s':(sL<=0?LG('PRÊTE','READY'):fmtT(sL))),!hasA?'rgba(255,255,255,.4)':(rv||sL<=0?'#7dff9a':'rgba(255,255,255,.85)')]];
   if(sp)it.push(['X',LG('REPÉRÉS !','SPOTTED!'),'#ffb0a4']);
@@ -9016,7 +9019,7 @@ const WVIS=(()=>{
   let yy=26+TS_*.72;txt(LG('ESCORTEZ VOTRE TANK','ESCORT YOUR TANK'),0,yy,TS_,acc,null,800);
   yy+=TS_*.5+16;txt(LG('jusqu’au camp ennemi et détruisez ses 4 cibles','to the enemy camp and destroy its 4 targets'),0,yy,14,'rgba(255,255,255,.9)',null,600);
   // legende : votre tank en bleu, les cibles ennemies en rouge
-  yy+=34;const lg=[['T',AC,LG('Votre tank','Your tank'),0],['A',EC,LG('Antenne ennemie','Enemy radar'),1],['B',EC,LG('Lance-missiles ennemi','Enemy launcher'),1]];
+  yy+=34;const lg=[['T',ALLYC,LG('Votre tank','Your tank'),0],['A',ENEMC,LG('Antenne ennemie','Enemy radar'),1],['B',ENEMC,LG('Lance-missiles ennemi','Enemy launcher'),1]];
   g.font='700 12px system-ui';const lw=lg.map(q=>g.measureText(q[2]).width+(q[3]?40:32)),lt=lw.reduce((s,w)=>s+w,0)+14*2,ks=Math.min(1,(cw-24)/lt);g.save();g.scale(ks,ks);let lx=-lt/2;
   lg.forEach((q,i)=>{badge(q[0],lx+(q[3]?16:11),yy/ks,10,q[1],q[3]);txt(q[2],lx+(q[3]?35:27),yy/ks+.5,12,q[3]?'#ffd9d4':'#e6f2ff','left',700);lx+=lw[i]+14});g.restore();
   // commandes utiles (touche, puis texte aligne)
