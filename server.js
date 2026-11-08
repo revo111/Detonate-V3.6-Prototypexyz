@@ -30,7 +30,8 @@ const MAP_SIZE = {
   neige: 6,  // Base Polaire : 6v6, mode Code Rouge
   neigeN: 6,  // Base Polaire de nuit (meme carte, ambiance nocturne)
   foret: 5,   // Foret : mode Zombie, 5 equipes de 2 (10 places)
-  guerre: 10  // Front : carte de guerre, 10v10
+  guerre: 10, // Front : carte de guerre, 10v10
+  tetris: 6   // Tetris (V3.6) : mode Cristal, 4 equipes de 3 (12 places)
 };
 // Front : la taille d'equipe est relue dans index.html (le fichier que la simulation execute) :
 // le serveur et le jeu ne peuvent plus diverger, meme si seul index.html a ete mis a jour.
@@ -39,8 +40,8 @@ try {
   const mm = /MAPS\.guerre=\(\(\)=>\{const m=\{[\s\S]{0,20000}?"TS":(\d+)/.exec(html);
   if (mm && +mm[1] >= 2 && +mm[1] <= 16) MAP_SIZE.guerre = +mm[1];
 } catch (e) {}
-// nombre d'equipes : 2 partout, 5 sur la Foret (mode Zombie)
-const NTEAMS = room => (room.map === 'foret' ? 5 : 2);
+// nombre d'equipes : 2 partout, 5 sur la Foret (mode Zombie), 4 sur Tetris (mode Cristal)
+const NTEAMS = room => (room.map === 'foret' ? 5 : (room.map === 'tetris' ? 4 : 2));
 
 const ALPHA = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
@@ -186,7 +187,7 @@ const IDLE_MS = +process.env.DETONATE_IDLE_MS || 15 * 60 * 1000;      // salon v
 const EMPTY_GAME_MS = 2 * 60 * 1000; // partie sans aucun joueur connecte depuis 2 min -> arretee, retour au salon
 const END_LOBBY_MS = 15 * 1000;      // fin de partie : retour au salon 15 s apres l'ecran de fin
 // cartes et modes proposes au vote (tdm seulement la ou il existe)
-const VOTE_MAPS = ['nuit', 'desert', 'neon', 'neige', 'neigeN', 'foret', 'guerre'];
+const VOTE_MAPS = ['nuit', 'desert', 'neon', 'neige', 'neigeN', 'foret', 'guerre', 'tetris'];
 const TDM_MAPS = new Set(['nuit', 'desert', 'neon']);
 const fixMode = (map, mode) => (TDM_MAPS.has(map) && mode === 'tdm' ? 'tdm' : 'obj');
 const capOf = map => (map === 'foret' ? 10 : 2 * (MAP_SIZE[map] || 3));   // places d'une carte
@@ -203,7 +204,7 @@ const newId = () => Math.random().toString(36).slice(2, 10);
 const newTok = () => Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
 const cleanName = n => String(n || 'Joueur').replace(/[<>&"']/g, '').trim().slice(0, 14) || 'Joueur';
 const send = (ws, o) => { if (ws && ws.readyState === 1) ws.send(JSON.stringify(o)); };
-const teamOf = (room, slot) => room.map === 'foret' ? (slot >> 1) : (slot < room.size ? 0 : 1);
+const teamOf = (room, slot) => room.map === 'foret' ? (slot >> 1) : (room.map === 'tetris' ? (slot / 3 | 0) : (slot < room.size ? 0 : 1));
 const online = room => room.players.filter(p => p.ws);
 const sendRoom = (room, o) => { const d = JSON.stringify(o); online(room).forEach(p => { if (p.ws.readyState === 1) p.ws.send(d); }); };
 
