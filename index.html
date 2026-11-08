@@ -83,8 +83,8 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
 /* barre du haut */
 .mtop{grid-area:top;display:flex;align-items:center;gap:14px;min-width:0;padding-right:52px}
 @media (pointer:coarse){.mtop{padding-right:96px}}
-#menu .logo{margin:0;display:flex;align-items:center;gap:10px;font:700 22px/1 var(--fd);letter-spacing:.24em;white-space:nowrap}
-#menu .logo .ver{position:static;margin:0;padding:4px 6px 3px;border-radius:5px;border:1px solid rgba(255,200,60,.4);background:rgba(255,200,60,.1);color:#ffc83c;font:700 11px/1 var(--fd);letter-spacing:.06em}
+#menu .logo{margin:0;display:flex;align-items:center;gap:14px;font:700 36px/1 var(--fd);letter-spacing:.22em;white-space:nowrap;text-shadow:0 2px 18px rgba(0,0,0,.55)}
+#menu .logo .ver{position:static;margin:0;padding:5px 8px 4px;border-radius:6px;border:1px solid rgba(255,200,60,.4);background:rgba(255,200,60,.1);color:#ffc83c;font:700 16px/1 var(--fd);letter-spacing:.06em;text-shadow:none}
 .mtopR{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:0}
 #langSel{display:flex;gap:2px;padding:3px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);margin:0}
 #langSel button{margin:0;padding:6px 10px;border:0;border-radius:999px;background:none;color:var(--mute);font:700 11.5px/1 var(--fd);letter-spacing:.08em;cursor:pointer}
@@ -199,7 +199,7 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
 @media (max-height:560px) and (min-width:600px){
  #menu .panel{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "rail strip";gap:8px 18px;
   padding:max(8px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
- #menu .logo{font-size:16px;letter-spacing:.2em}#menu .logo .ver{font-size:10px}
+ #menu .logo{font-size:24px;letter-spacing:.2em;gap:10px}#menu .logo .ver{font-size:12.5px;padding:4px 6px 3px}
  #founder .role{display:none}#founder .av{width:26px;height:26px}#founder .xl{padding:5px 8px}
  .rail{gap:10px}#mapInfo{gap:7px}
  #mName{font-size:clamp(28px,4.6vw,40px)}
@@ -226,7 +226,7 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
  .rail,.mtop{display:contents}
  #menu .logo{order:0;min-height:34px;padding-right:96px}.mtopR{order:6;margin:6px 0 0;justify-content:space-between;flex-wrap:wrap;gap:10px}#mapInfo{order:1;margin-top:auto;padding-top:22vh}#mapPick{order:2}#mainMenu,#privateMenu,#lobby{order:3}#menuMsgMain{order:4}
  #menu[data-v=privateMenu] #mapInfo{padding-top:0}#menu[data-v=lobby] .mtop{margin-bottom:6px}
- #menu .logo{font-size:16px;letter-spacing:.18em}#menu .logo .ver{font-size:10px}
+ #menu .logo{font-size:24px;letter-spacing:.18em;gap:10px}#menu .logo .ver{font-size:12.5px;padding:4px 6px 3px}
  #mName{font-size:44px}
  #mapPick{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:8px;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none}
  #mapPick::-webkit-scrollbar{display:none}
@@ -3584,10 +3584,10 @@ else{
  else e.post=0;
  if(tgt){e.seen+=dt;e.thr_=T;e.chase={x:tgt.x,y:tgt.y,t:T};if(can===5||(can===3&&e.mode==='hack'))act=1;   // sur l'objectif (antenne, mallette) : le bot continue d'appuyer tout en se defendant
 e.lost=0;
-  const lv=tgt.lv||[0,0],d0=td/960,ap=tgt.sco===1&&SC[tgt.scI]?vanCab(SC[tgt.scI]):tgt,aim=Math.atan2(ap.y+lv[1]*d0-e.y,ap.x+lv[0]*d0-e.x);e.want=aim;
+  const lv=tgt.lv||[0,0],d0=td/960*(CRM()?.55:1),ap=tgt.sco===1&&SC[tgt.scI]?vanCab(SC[tgt.scI]):tgt,aim=Math.atan2(ap.y+lv[1]*d0-e.y,ap.x+lv[0]*d0-e.x)+(CRM()?Math.sin(T*1.6+e.id*2.1)*.14+Math.sin(T*.55+e.id*4.7)*.09:0);e.want=aim;   // Tetris : visee qui flotte (+-0,23 rad) et anticipation partielle
   let df=aim-e.ang;df=Math.atan2(Math.sin(df),Math.cos(df));
   // temps de reaction : plus court si on etait deja oriente vers la cible
-  if(!e.react)e.react=WARM()?.07+Math.random()*.15+(Math.abs(df)>.9?.13:0):.1+Math.random()*.22+(Math.abs(df)>.9?.18:0);
+  if(!e.react)e.react=(WARM()?.07+Math.random()*.15+(Math.abs(df)>.9?.13:0):.1+Math.random()*.22+(Math.abs(df)>.9?.18:0))+(CRM()?.12:0);
   if(e.seen>e.react&&Math.abs(df)<.26&&e.rl<=0&&onTargetScreen(e,tgt)&&!(WARM()&&wBarSeg(e.x,e.y,tgt.x,tgt.y,e.team)))fire=1;
   // rythme de duel : on alterne de courtes phases (tir pose / deplacement lateral / replacement)
   e.st-=dt;
@@ -3687,7 +3687,7 @@ e.cd-=dt;if(e.rl>0){e.rl-=dt;if(e.rl<=0){e.rl=0;e.ammo=30}}else if(!(e.frz>0)&&(
 if(e.wv>=0&&WARM()){if(!warm)wFire(e,fire,dt);fire=0}else if(e.wl>=0&&WARM()){if(!warm)wLFire(e,fire);fire=0}if(e.moto||e.sco===1||e.frz>0)fire=0;   // pas de tir en moto ni pendant l'immobilisation par une grenade IEM
 // immobilise par une IEM : le joueur reste totalement statique (ni deplacement, ni rotation, ni recharge)
 if(e.frz>0){if(e.fa===undefined)e.fa=e.ang;e.ang=e.fa;e.bv=0}else e.fa=undefined;
-if(fire&&e.cd<=0&&e.rl<=0&&e.ammo>0){const m=bFree();if(m){e.ammo--;if(e.ammo<=0)e.rl=e.p?2:2.3;e.cd=(e.p?.2:(WARM()?.24:.3))/(e.boost?1.3:1)/(CRM()?1+crRB(e,1):1);e.fT=.06;const a=e.ang+(e.p?0:(Math.random()-.5)*(WARM()?.075:.12));m.visible=true;
+if(fire&&e.cd<=0&&e.rl<=0&&e.ammo>0){const m=bFree();if(m){e.ammo--;if(e.ammo<=0)e.rl=e.p?2:2.3;e.cd=(e.p?.2:(WARM()?.24:.3))/(e.boost?1.3:1)/(CRM()?1+crRB(e,1):1);e.fT=.06;const a=e.ang+(e.p?0:(Math.random()-.5)*(WARM()?.075:(CRM()?.28:.12)));m.visible=true;
 shot(Math.max(.15,1-Math.hypot(e.x-CP.x,e.y-CP.y)/1100),e.x-CP.x,e.team);B.push(bHgt({x:e.x+Math.cos(a)*14,y:e.y+Math.sin(a)*14,vx:Math.cos(a)*BSPD,vy:Math.sin(a)*BSPD,t:BLIFE,team:e.team,id:e.id,u:++bseq,m},e));
 for(const f of foes)if(Math.hypot(f.x-e.x,f.y-e.y)<750)K[f.team][e.id]={x:e.x,y:e.y,t:T,hear:1}}}
 }
