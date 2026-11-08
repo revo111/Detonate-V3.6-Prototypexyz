@@ -7720,10 +7720,10 @@ function crMark(x,y,h,kind,now,mt){let[sx,sy]=wscr(x,y,h);const m=34,top=Math.ma
 // tout l'ATH propre au mode (appele apres le reste de l'ATH, avant l'ecran de fin)
 function crOverlay(hm,mt,now,HB2){crEvents(mt,now);if(st.s==='end')return;const c=(hm&&hm.alive)?hm:(specTarget(mt)||hm);if(c)crRankMarks(c,now);
  if(st.s==='live'||st.s==='freeze'){if(CR.st!=='wait')crMark(CR.zx,CR.zy,8,'z',now,mt);const car=CR.st==='car'?E[CR.car]:null;if(CR.st==='ground')crMark(CR.x,CR.y,30,'c',now,mt);else if(car&&car.id!==localSlot)crMark(car.x,car.y,52,'c',now,mt)}
- // annonces (depot, cristal pris ou tombe, rang)
- CRMSG=CRMSG.filter(m=>now-m.t<3800);let y=Math.min(Math.max(H*.2,HB2+30),H*.46)+(st.s==='freeze'?260:0);
- for(const m of CRMSG.slice(H<500?-1:-2)){const f=(now-m.t)/3800,al=f<.08?f/.08:(f>.8?(1-f)/.2:1);g.save();g.globalAlpha=al;g.font='800 19px system-ui';const w=Math.max(g.measureText(m.t1).width+40,m.t2?(g.font='600 12px system-ui',g.measureText(m.t2).width+30):0);
-  pill(W/2-w/2,y-17,w,m.t2?52:34,14,'rgba(8,12,22,.84)');txt(m.t1,W/2,y,19,m.c1,null,800);if(m.t2)txt(m.t2,W/2,y+21,12,'rgba(255,255,255,.82)',null,600);y+=m.t2?60:42;g.restore()}}
+ // annonces (depot, cristal pris ou tombe, rang) : petites, pour ne pas cacher le jeu (titre 13 px au lieu de 19, sous-titre 10 au lieu de 12)
+ const F1=IS_PC?13:12,F2=IS_PC?10:9.5;CRMSG=CRMSG.filter(m=>now-m.t<3800);let y=Math.min(Math.max(H*.2,HB2+30),H*.46)+(st.s==='freeze'?260:0);
+ for(const m of CRMSG.slice(H<500?-1:-2)){const f=(now-m.t)/3800,al=f<.08?f/.08:(f>.8?(1-f)/.2:1);g.save();g.globalAlpha=al;g.font='800 '+F1+'px system-ui';const w=Math.max(g.measureText(m.t1).width+26,m.t2?(g.font='600 '+F2+'px system-ui',g.measureText(m.t2).width+22):0);
+  pill(W/2-w/2,y-12,w,m.t2?37:24,10,'rgba(8,12,22,.84)');txt(m.t1,W/2,y,F1,m.c1,null,800);if(m.t2)txt(m.t2,W/2,y+15,F2,'rgba(255,255,255,.82)',null,600);y+=m.t2?43:30;g.restore()}}
 // mini-carte : zone de depot (dans le repere de la carte)
 function crMini(){if(CR.st==='wait'||st.s==='end')return;const nw=performance.now(),mine=CR.car>=0&&E[CR.car]&&E[CR.car].team===MT,c=mine?'#7dff9a':'#ffd24a';
  g.globalAlpha=.28;g.fillStyle=c;g.beginPath();g.arc(CR.zx,CR.zy,CR_ZR,0,7);g.fill();g.globalAlpha=.6+.4*Math.abs(Math.sin(nw/300));g.strokeStyle=c;g.lineWidth=34;g.beginPath();g.arc(CR.zx,CR.zy,CR_ZR+30,0,7);g.stroke();g.globalAlpha=1}
