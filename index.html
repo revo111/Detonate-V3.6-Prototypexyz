@@ -10,7 +10,7 @@ canvas{position:fixed;left:0;top:0}#h{pointer-events:none}
 #rel{position:fixed;right:calc(24px + env(safe-area-inset-right,0px));top:54%;width:62px;height:62px;border-radius:50%;border:3px solid #fff9;background:#000a;color:#fff;font:700 15px system-ui;touch-action:none}#rel:active{background:#fff;color:#000}
 #gre{position:fixed;right:calc(30px + env(safe-area-inset-right,0px));top:calc(54% + 74px);width:52px;height:52px;border-radius:50%;border:3px solid #9fc25a;background:#000a radial-gradient(circle at 50% 56%,#56652c 0 11px,transparent 12px);touch-action:none}
 #gre::after{content:'';position:absolute;left:21px;top:9px;width:8px;height:7px;background:#9a9a92;border-radius:2px}
-#gre.vide{opacity:.3}
+#gre.vide{opacity:.3}#gre.tet::after{display:none}
 #act:active{background:#ffc83c;color:#000}
 
 #menu{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(5,9,18,.78),rgba(5,9,18,.92));font-family:system-ui,sans-serif;color:#fff}
@@ -2493,9 +2493,9 @@ box(9,16,15,mu,0,22,0,b);box(3,12,12,mb,-5,22,0,b);const pk=new THREE.Group();bo
 const h=new THREE.Mesh(new THREE.SphereGeometry(5.5,10,8),ms);h.position.y=35;b.add(h);
 const hl=new THREE.Mesh(new THREE.SphereGeometry(6.4,10,6,0,Math.PI*2,0,1.6),mb);hl.position.y=36;b.add(hl);
 box(15,4,4,mu,8,25,-6,b).rotation.y=.4;box(11,4,4,mu,5,24,6,b);
-const gn=new THREE.Group();b.add(gn);box(28,5,4,mb,14,25,1,gn);box(4,9,3,mb,12,19,1,gn);box(10,6,4,mb,-2,24,1,gn);box(6,2,2,redM,20,28,1,gn);
-const br=new THREE.Mesh(new THREE.CylinderGeometry(1,1,14,6),mb);br.rotation.z=Math.PI/2;br.position.set(33,26,1);gn.add(br);
-const fl=new THREE.Mesh(new THREE.SphereGeometry(4,6,5),new THREE.MeshBasicMaterial({color:0xffe08a}));fl.position.set(42,26,1);fl.visible=false;b.add(fl);
+const gn=new THREE.Group();b.add(gn);if(TET_)TARM.gun(team,gn);else{box(28,5,4,mb,14,25,1,gn);box(4,9,3,mb,12,19,1,gn);box(10,6,4,mb,-2,24,1,gn);box(6,2,2,redM,20,28,1,gn);
+const br=new THREE.Mesh(new THREE.CylinderGeometry(1,1,14,6),mb);br.rotation.z=Math.PI/2;br.position.set(33,26,1);gn.add(br)}
+const fl=new THREE.Mesh(TET_?new THREE.BoxGeometry(6,6,6):new THREE.SphereGeometry(4,6,5),new THREE.MeshBasicMaterial({color:TET_?TARM.flc(team):0xffe08a}));fl.position.set(TET_?35:42,26,1);if(TET_)fl.rotation.set(.62,.79,0);fl.visible=false;b.add(fl);
 grp.add(b);const rg=new THREE.Mesh(new THREE.RingGeometry(10,13,20),new THREE.MeshBasicMaterial({color:RING[team]}));rg.rotation.x=-Math.PI/2;rg.position.y=1.2;grp.add(rg);
 const hp=new THREE.Mesh(new THREE.PlaneGeometry(34,4),new THREE.MeshBasicMaterial({color:0x40e060}));hp.rotation.x=-Math.PI/2;hp.position.set(0,2,-22);grp.add(hp);
 grp.scale.setScalar(1.25);sc.add(grp);return{grp,b,l1,l2,fl,hp,rg,pk,pl,gn,rc:RING[team]}}
@@ -2754,8 +2754,8 @@ function updGren(dt){for(const g0 of GR){g0.t+=dt;
      if(SC.length){for(const s of SC)if(s.st!==2&&Math.hypot(s.x-X,s.y-Y)<GR_R+45)vanKill(s,g0.id,hs);for(const c of CANS)if(c.on&&c.arm&&Math.hypot(c.x-X,c.y-Y)<GR_R){canBoom(c,g0.id);break}}}   // grenade : camionnette detruite, bidons pieges declenches   // tout le monde dans la zone : ennemis, allies et le lanceur lui-meme
    if(WARM())wGrenBoom(X,Y,g0.id);if(ZMB())zBoom(X,Y,g0.id);for(const e of E)if(e.team!==g0.team&&e.alive)K[e.team][g0.id]={x:g0.sx,y:g0.sy,t:T,hear:1}}}
  GR=GR.filter(g0=>{if(g0.done){grHide(g0);return false}return true})}
-function grHide(g0){const m=g0.m;if(!m)return;m.g.visible=m.s.visible=m.zf.visible=m.zr.visible=m.zc.visible=false}
-function fxBoom(x,y,tm){if(NEO()){iemFx(x,y,tm||0);return}const q=GFX.reduce((a,b)=>a.t>b.t?a:b);q.t=0;q.x=x;q.y=y;const D=CUR.theme==='desert';
+function grHide(g0){const m=g0.m;if(!m)return;m.g.visible=m.s.visible=m.zf.visible=m.zr.visible=m.zc.visible=false;if(m.tz)m.tz.visible=false}
+function fxBoom(x,y,tm){if(TETM()){TARM.boom(x,y,tm||0);return}if(NEO()){iemFx(x,y,tm||0);return}const q=GFX.reduce((a,b)=>a.t>b.t?a:b);q.t=0;q.x=x;q.y=y;const D=CUR.theme==='desert';
  q.sc.position.set(x,.6,y);q.glow.position.set(x,.8,y);q.w1.position.set(x,1.4,y);q.w2.position.set(x,1.1,y);q.sc.rotation.z=Math.random()*6.28;q.w2.rotation.z=Math.random()*6.28;
  q.w2.material.color.setHex(D?0xc4a678:0x9a938a);q.sc.material.color.setHex(D?0x8a6a4a:0xffffff);
  q.core.position.set(x,18,y);q.fb.position.set(x,15,y);[q.sc,q.glow,q.w1,q.w2,q.core,q.fb].forEach(m=>m.visible=true);
@@ -2791,14 +2791,14 @@ function fxGren(dt){for(const q of GFX){if(q.t>2.1)continue;q.t+=dt;const t=q.t,
   // eclair de lumiere sur le decor
   if(BLQ===q)BLT.intensity=t<.6?5*Math.pow(1-t/.6,2):0}
  gShake=Math.max(0,gShake-dt*40);const now=performance.now();
- for(const g0 of GR){const m=g0.m;if(!m)continue;m.g.position.set(g0.x,g0.h,g0.y);if(NEO()){const tm=g0.tm??g0.team??0;if(!m.iem)m.iem=[iemModel(0),iemModel(1)].map(q=>{m.g.add(q);return q});for(let i=0;i<3;i++)m.g.children[i].visible=false;m.iem[0].visible=tm===0;m.iem[1].visible=tm===1;iemSoundTick(g0);const c=TD(tm).hex;m.zf.material.color.setHex(c);m.zr.children.forEach(q=>q.material.color.setHex(c));m.zc.material.color.setHex(c)}else{for(let i=0;i<3;i++)m.g.children[i].visible=!g0.molo;if(m.mol||g0.molo)zMoloMesh(m,g0);if(m.iem)m.iem.forEach(q=>q.visible=false);m.zf.material.color.setHex(0xff3a20);m.zr.children.forEach(q=>q.material.color.setHex(0xff5a30));m.zc.material.color.setHex(0xffd0a0)}if(!(g0.fu>=0))m.g.rotation.x+=dt*14;m.s.position.set(g0.x,1.2,g0.y);m.s.scale.setScalar(1/(1+g0.h/90));
+ for(const g0 of GR){const m=g0.m;if(!m)continue;m.g.position.set(g0.x,g0.h,g0.y);if(m.tt&&!TETM())TARM.grOff(m);if(TETM())TARM.grLook(m,g0);else if(NEO()){const tm=g0.tm??g0.team??0;if(!m.iem)m.iem=[iemModel(0),iemModel(1)].map(q=>{m.g.add(q);return q});for(let i=0;i<3;i++)m.g.children[i].visible=false;m.iem[0].visible=tm===0;m.iem[1].visible=tm===1;iemSoundTick(g0);const c=TD(tm).hex;m.zf.material.color.setHex(c);m.zr.children.forEach(q=>q.material.color.setHex(c));m.zc.material.color.setHex(c)}else{for(let i=0;i<3;i++)m.g.children[i].visible=!g0.molo;if(m.mol||g0.molo)zMoloMesh(m,g0);if(m.iem)m.iem.forEach(q=>q.visible=false);m.zf.material.color.setHex(0xff3a20);m.zr.children.forEach(q=>q.material.color.setHex(0xff5a30));m.zc.material.color.setHex(0xffd0a0)}if(TETM())TARM.grRot(m,g0,dt,now);else if(!(g0.fu>=0))m.g.rotation.x+=dt*14;m.s.position.set(g0.x,1.2,g0.y);m.s.scale.setScalar(1/(1+g0.h/90));
   // pendant la meche : zone de danger au sol + voyant qui clignote de plus en plus vite
   const fu=g0.molo?-1:(g0.fu>=0?g0.fu:(g0.t>=g0.T?Math.min(1,(g0.t-g0.T)/GR_FUSE):-1));
   if(fu>=0){const sp=4+fu*14,pul=.5+.5*Math.sin(now/1000*sp);m.zf.visible=m.zr.visible=m.zc.visible=true;
    m.zf.position.set(g0.x,1.1,g0.y);m.zf.material.opacity=.08+.10*fu+.06*pul;
    m.zr.position.set(g0.x,1.3,g0.y);m.zr.rotation.z+=dt*(1+fu*3);m.zr.children.forEach(c=>c.material.opacity=.45+.5*pul);
    m.zc.position.set(g0.x,1.2,g0.y);m.zc.material.opacity=.25+.35*pul;m.led.material.color.setHex(pul>.5?0xff2010:0x401008)}
-  else{m.zf.visible=m.zr.visible=m.zc.visible=false}}}
+  else{m.zf.visible=m.zr.visible=m.zc.visible=false}if(m.tz||TETM())TARM.grZone(m,g0,fu,now)}}
 function boomSnd(v,dx){if(!AC||!WS||v<.03)return;try{if(!IMPN)impNoise();const r=Math.random,t=AC.currentTime+.004;
  // de loin : l'air etouffe les aigus, il reste surtout le grondement
  const o=AC.createGain();o.gain.value=v;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=380+11000*v*v;lp.Q.value=.5;o.connect(lp);sndPan(lp,dx,700);
@@ -2811,7 +2811,7 @@ function boomSnd(v,dx){if(!AC||!WS||v<.03)return;try{if(!IMPN)impNoise();const r
  impNz(o,t+.12,.8+r()*.4,'bandpass',3500+r()*1500,.7,.1,.25);          // terre et sable qui retombent
  if(v>.78){const g=AC.createGain(),s=AC.createOscillator();s.type='sine';s.frequency.value=3600+r()*500;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.05*(v-.78)/.22,t+.06);g.gain.exponentialRampToValueAtTime(.0001,t+1.7);s.connect(g);g.connect(WS);s.start(t);s.stop(t+1.75)}   // sifflement d'oreille tout pres
  }catch(x){}}
-function throwSnd(){}   // lancer silencieux
+function throwSnd(v){if(TETM())TARM.throwSnd(v)}   // lancer silencieux
 // cible de lancer du joueur local : le point vise par la souris (ou devant soi sur mobile)
 function grTarget(){const me=E&&E[localSlot];if(!me)return null;if(mouseMode){const upp=2*CAMH*Math.tan(25*Math.PI/180)/H,sg=FLIP?-1:1;return{x:CP.x+sg*(mouseXY.x-W/2)*upp,y:CP.y+sg*(mouseXY.y-H/2)*upp}}
  return{x:me.x+Math.cos(aimAng)*420,y:me.y+Math.sin(aimAng)*420}}
@@ -3333,7 +3333,7 @@ function shotBudget(v){const t=AC.currentTime;let w=0;for(const q of SVO)if(t-q<
  if(n>=8||(n>=5&&v<.5)||(n>=3&&v<.25))return 0;SVO.push(t);
  const duck=Math.max(.6,1/(1+Math.max(0,n-2)*.07));WS.gain.cancelScheduledValues(t);WS.gain.setTargetAtTime(duck,t,.03);WS.gain.setTargetAtTime(1,t+.25,.2);
  return 1/Math.sqrt(1+Math.max(0,n-1)*.12)}
-function shot(v,dx,team){if(NEO()){blasterSnd(v,dx,team||0);return}if(!AC||!WS||v<.05)return;try{const bq=shotBudget(v);if(!bq)return;if(!IMPN)impNoise();const r=Math.random,t=AC.currentTime+.003,far=v<.35;
+function shot(v,dx,team){if(TETM()){TARM.shotSnd(v,dx,team||0);return}if(NEO()){blasterSnd(v,dx,team||0);return}if(!AC||!WS||v<.05)return;try{const bq=shotBudget(v);if(!bq)return;if(!IMPN)impNoise();const r=Math.random,t=AC.currentTime+.003,far=v<.35;
  // de loin : moins d'aigus (claquement etouffe), de pres : detonation seche et pleine
  const o=AC.createGain();o.gain.value=v*1.2*bq;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1600+15000*v*v;lp.Q.value=.5;o.connect(lp);sndPan(lp,dx,600);
  if(!far)impNz(o,t,.011,'highpass',1600+r()*900,.7,1.25,.0004);                // claquement de bouche (inaudible de loin)
@@ -3647,7 +3647,7 @@ function icoGren(x,y,r,on){g.save();g.globalAlpha=on?1:.3;g.translate(x,y);g.fil
  g.strokeStyle='rgba(0,0,0,.35)';g.lineWidth=1;g.beginPath();g.moveTo(-r*.6,r*.2);g.lineTo(r*.6,r*.2);g.stroke();g.restore();if(!on)txt('0',x+r+6,y,11,'rgba(255,255,255,.4)','left',600)}
 function drawGrenAim(hm){const touchA=typeof GA!=='undefined'&&GA;if(!(hm&&hm.alive&&!hm.moto&&hm.gren>0&&!(hm.frz>0)&&st.s==='live'&&((KC[ZMB()?'KeyV':'KeyQ']&&mouseMode)||touchA)))return;const t=touchA?gaTarget():grTarget();if(!t)return;
  // couleur de la visee : orange (grenade classique) ou couleur de l'equipe (grenade IEM sur Neon Grid)
- const tcc=NEO()?new THREE.Color(TD(hm.team).hex):null,AR=tcc?Math.round(tcc.r*255):255,AG=tcc?Math.round(tcc.g*255):170,AB=tcc?Math.round(tcc.b*255):90,ac=a=>'rgba('+AR+','+AG+','+AB+','+a+')';
+ const tcc=(NEO()||TETM())?new THREE.Color(TD(hm.team).hex):null,AR=tcc?Math.round(tcc.r*255):255,AG=tcc?Math.round(tcc.g*255):170,AB=tcc?Math.round(tcc.b*255):90,ac=a=>'rgba('+AR+','+AG+','+AB+','+a+')';
  if(touchA){const r=gb_.getBoundingClientRect(),bx=r.left+r.width/2,by=r.top+r.height/2,d=Math.hypot(GA.dx,GA.dy);g.save();g.strokeStyle=ac(.85);g.lineWidth=2;g.setLineDash([4,4]);g.beginPath();g.arc(bx,by,14+80,0,7);g.stroke();g.setLineDash([]);
   if(d>=14){g.beginPath();g.moveTo(bx,by);g.lineTo(bx+GA.dx,by+GA.dy);g.stroke()}g.fillStyle=ac(.95);g.beginPath();g.arc(bx+GA.dx,by+GA.dy,7,0,7);g.fill();
   txt(d<14?'Glisse pour viser · relâche pour lancer':'Relâche pour lancer',bx-20,by-108,12,'rgba(255,230,200,.95)','right',700);g.restore()}
@@ -3720,8 +3720,8 @@ function drawATH(hm,narrow){const sc=(W<420?.92:(W>=1100&&H>=650?1.12:1))*.8,pw=
  else{const lowA=hm.ammo<=8;g.font='800 '+Math.round(26*sc)+'px system-ui';const aws=g.measureText(String(hm.ammo)).width;
   txt(hm.ammo,ax,ty+1,Math.round(26*sc),lowA?'#ff8a6a':'#fff','left',800);txt('/ ∞',ax+aws+5,ty+3,Math.round(13*sc),'rgba(255,255,255,.5)','left',600);
   // chargeur : une petite barre par balle (30)
-  const n=30,gap=1.5,cw_=(aw-gap*(n-1))/n;for(let k=0;k<n;k++){g.fillStyle=k<hm.ammo?(lowA?'#ff8a6a':'rgba(255,236,190,.9)'):'rgba(255,255,255,.12)';g.fillRect(ax+k*(cw_+gap),by,cw_,bh)}}
- if(NEO())icoIEM(px+pw-30*sc,ty,9*sc,hm.gren>0,TD(hm.team).css);else icoGren(px+pw-30*sc,ty,10*sc,hm.gren>0);
+  const n=30,gap=1.5,cw_=(aw-gap*(n-1))/n;for(let k=0;k<n;k++){g.fillStyle=k<hm.ammo?(lowA?'#ff8a6a':(TETM()?TD(hm.team).css:'rgba(255,236,190,.9)')):'rgba(255,255,255,.12)';g.fillRect(ax+k*(cw_+gap),by,cw_,bh)}}
+ if(TETM())TARM.ico(px+pw-30*sc,ty,10*sc,hm.gren>0,TD(hm.team).css);else if(NEO())icoIEM(px+pw-30*sc,ty,9*sc,hm.gren>0,TD(hm.team).css);else icoGren(px+pw-30*sc,ty,10*sc,hm.gren>0);
  // ---- bonus du drapeau au-dessus de la barre : symboles clairs
  if(hm.boost){const items=[[icoHeart,'+25 %',LG('PV','HP'),'#ff6b81'],[icoBullets,'+30 %',LG('cadence','fire rate'),'#ffc83c'],[icoSpeed,'+20 %',LG('vitesse','speed'),'#5fd7ff']];
   const fs=Math.round(12*sc),chh=24*sc,cy=py-chh/2-6;let tot=0;const ws=items.map(it=>{g.font='800 '+fs+'px system-ui';const a=g.measureText(it[1]).width;g.font='600 '+fs+'px system-ui';const b=W<420?0:g.measureText(' '+it[2]).width;return 30*sc+a+b+10});
@@ -5236,7 +5236,7 @@ let SBOLT=null;function snowBolts(){if(SBOLT||HEADLESS)return;const c=document.c
  x.fillStyle='#ffd9a0';x.beginPath();x.ellipse(214,32,8,3.5,0,0,7);x.fill();
  const t=new THREE.CanvasTexture(c),mat=new THREE.MeshBasicMaterial({map:t,transparent:true,depthWrite:false,side:THREE.DoubleSide}),pg=new THREE.PlaneGeometry(58,13),cg=new THREE.CylinderGeometry(1.1,1.1,24,6),cm=new THREE.MeshBasicMaterial({color:0xd8701e});
  SBOLT={mat};for(const m of BP){const g=new THREE.Group(),p1=new THREE.Mesh(pg,mat);p1.rotation.x=-Math.PI/2;p1.position.x=-10;p1.renderOrder=3;g.add(p1);const co=new THREE.Mesh(cg,cm);co.rotation.z=Math.PI/2;g.add(co);g.visible=false;m.add(g);m.userData.s=g}}
-function boltLook(b){const m=b.m,k=ZMB()&&b.sg?'p':ZMB()&&b.xb?'x':(ZMB()&&b.ar?'s':(NEO()?(b.team?'w':'r'):(CUR&&CUR.theme==='neige'?'s':'c')));if(m.userData.k===k)return;m.userData.k=k;if(k==='x'&&!m.userData.x)m.userData.x=zBoltMesh(m);if(m.userData.x)m.userData.x.visible=k==='x';if(k==='r'||k==='w')boltKids();if(k==='s')snowBolts();m.children[0].visible=k==='c'||k==='p';m.children[0].scale.set(k==='p'?.45:1,k==='p'?.75:1,k==='p'?.75:1);if(m.userData.r){m.userData.r.visible=k==='r';m.userData.w.visible=k==='w'}if(m.userData.s)m.userData.s.visible=k==='s'}
+function boltLook(b){const m=b.m,k=ZMB()&&b.sg?'p':ZMB()&&b.xb?'x':(ZMB()&&b.ar?'s':(NEO()?(b.team?'w':'r'):(CUR&&CUR.theme==='neige'?'s':(TETM()?'t'+((b.team|0)&3):'c'))));if(m.userData.k===k)return;m.userData.k=k;if(k[0]==='t')TARM.bolt(m,+k[1]);if(m.userData.t)m.userData.t.visible=k[0]==='t';if(k==='x'&&!m.userData.x)m.userData.x=zBoltMesh(m);if(m.userData.x)m.userData.x.visible=k==='x';if(k==='r'||k==='w')boltKids();if(k==='s')snowBolts();m.children[0].visible=k==='c'||k==='p';m.children[0].scale.set(k==='p'?.45:1,k==='p'?.75:1,k==='p'?.75:1);if(m.userData.r){m.userData.r.visible=k==='r';m.userData.w.visible=k==='w'}if(m.userData.s)m.userData.s.visible=k==='s'}
 // ===================== SONS (Neon Grid) =====================
 function blasterSnd(v,dx,team){if(!AC||!WS||v<.05)return;try{const bq=shotBudget(v);if(!bq||!avOk(AC.currentTime+.3))return;if(!IMPN)impNoise();const t=AC.currentTime+.003,r=Math.random,s=1+(r()-.5)*.12,far=v<.35;
  const o=AC.createGain();o.gain.value=v*.55*bq;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2500+14000*v*v;o.connect(lp);sndPan(lp,dx,600);
@@ -5383,7 +5383,7 @@ function vanBlocks(a,b){if(!SC.length)return false;for(const s of SC){if(s.sunk)
   for(const[p,d,lo,hi]of[[u0,du,VAN_U0,VAN_U1],[v0,dv,-VAN_V,VAN_V]]){if(Math.abs(d)<1e-9){if(p<lo||p>hi){ok=false;break}continue}let q0=(lo-p)/d,q1=(hi-p)/d;if(q0>q1){const z=q0;q0=q1;q1=z}t0=Math.max(t0,q0);t1=Math.min(t1,q1);if(t0>t1){ok=false;break}}
   if(ok)return true}return false}
 function vanImpact(b,glass){const l=Math.hypot(b.vx,b.vy)||1,ix=b.x-b.vx/l*3,iy=b.y-b.vy/l*3;if(!HEADLESS){sparkAt(ix,iy,b.vx,b.vy,glass?0xdff2ff:undefined);impactSnd('c',ix,iy)}}
-function bulletImpact(b){if(NEO()){const l=Math.hypot(b.vx,b.vy)||1,ix=b.x-b.vx/l*3,iy=b.y-b.vy/l*3;sparkAt(ix,iy,b.vx,b.vy,b.team?0xdfeaff:0xff3030);neonImpactSnd(ix,iy,0);return}const t=hitType(b.x,b.y)||(WARM()&&wBarShot(b.x,b.y,b.team)?'c':null),l=Math.hypot(b.vx,b.vy)||1,ix=b.x-b.vx/l*3,iy=b.y-b.vy/l*3;if(t&&METAL[t])sparkAt(ix,iy,b.vx,b.vy);else if(CUR&&(CUR.theme==='neige'||CUR.theme==='guerre'||(ZMB()&&b.ar)))puffAt(ix,iy,b.vx,b.vy,t);if(!(b.sg===2&&Math.random()<.7))impactSnd(t,ix,iy)}
+function bulletImpact(b){if(TETM()){TARM.impact(b);return}if(NEO()){const l=Math.hypot(b.vx,b.vy)||1,ix=b.x-b.vx/l*3,iy=b.y-b.vy/l*3;sparkAt(ix,iy,b.vx,b.vy,b.team?0xdfeaff:0xff3030);neonImpactSnd(ix,iy,0);return}const t=hitType(b.x,b.y)||(WARM()&&wBarShot(b.x,b.y,b.team)?'c':null),l=Math.hypot(b.vx,b.vy)||1,ix=b.x-b.vx/l*3,iy=b.y-b.vy/l*3;if(t&&METAL[t])sparkAt(ix,iy,b.vx,b.vy);else if(CUR&&(CUR.theme==='neige'||CUR.theme==='guerre'||(ZMB()&&b.ar)))puffAt(ix,iy,b.vx,b.vy,t);if(!(b.sg===2&&Math.random()<.7))impactSnd(t,ix,iy)}
 // impacts non metalliques (Base Polaire) : petit nuage + eclats de la matiere touchee (toile, neige, pierre, bois, beton, aiguilles)
 let PUF=null;const PUFC={E:[0xd8d4c0,0x6a7048],P:[0x2e4a34,0xeef3f8],N:[0x6b7078,0xeef3f8],B:[0x8a5a3a,0xe9e6de],w:[0x9aa2ab,0xeef3f8],s:[0x9a8a62,0xeef3f8],k:[0x8a6a3a,0xeef3f8],L:[0x5c3d26,0xeef3f8],F:[0x6a4a30,0xeef3f8],W:[0x6a4a30,0xeef3f8],U:[0x6f6a52,0xeef3f8],A:[0x4b5320,0xeef3f8],K:[0x2a2e34,0xeef3f8]};
 function puffAt(x,y,vx,vy,t){if(HEADLESS||(typeof localSlot!=='undefined'&&localSlot<0))return;if(Math.hypot(x-CP.x,y-CP.y)>1300)return;
@@ -7736,6 +7736,162 @@ function crMiniPx(ox,oy){if(st.s==='end'||CR.st==='wait')return;const nw=perform
 function crLobby(){const TT=TEAMS.tetris,row=slot=>{const p=netPlayers.find(x=>x.slot===slot),Q=TT[slot/3|0];return '<div class="player" style="border-left:4px solid '+Q.dot+';background:'+Q.pill.replace(/[\d.]+\)$/,'.16)')+'">'+(p?lobName(p):'<span style="opacity:.55">IA</span>')+'</div>'};
  $('players').innerHTML='<div class="small" style="margin-bottom:8px">'+LG('CARTE : TETRIS · MODE CRISTAL · 4 équipes de 3','MAP: TETRIS · CRYSTAL MODE · 4 teams of 3')+'</div><div class="small" style="margin:-4px 0 6px;opacity:.75">'+LG('Déposez le cristal dans la zone dorée · premier à ','Bring the crystal to the golden zone · first to ')+CR_WIN+'</div>'+
   [0,1,2,3].map(t=>'<div class="small" style="margin-top:7px;color:'+TT[t].css+';opacity:.95">'+TT[t].nom+'</div>'+row(3*t)+row(3*t+1)+row(3*t+2)).join('');lobFoot()}
+// ===================================================================================================
+// ===================== ARMES DE LA CARTE TETRIS (V3.6) : blaster « L » et grenade « T » =====================
+// ===================================================================================================
+// Uniquement l'apparence et le son : degats, cadence, portee, chargeur, rayon et meche sont ceux du fusil d'assaut et de la grenade classique.
+// - Blaster L : un tetrimino L en blocs biseautes de la couleur de l'equipe (corps + poignee), crosse grise, canon en pixels lumineux.
+//   Il tire des cubes lumineux qui tournent sur eux-memes, suivis d'une trainee de pixels ; a l'impact, eclats de pixels.
+//   Son « 8 bits » : impulsion carree qui descend, un peu plus aigue ou plus grave selon l'equipe.
+// - Grenade T : un tetrimino T qui tourne en vol. Au sol il pivote d'un quart de tour a chaque bip et une grille se remplit
+//   ligne par ligne dans la zone de danger (la pile monte jusqu'en haut : boum). Explosion « ligne complete » : les cases
+//   clignotent puis s'effacent du centre vers les bords, onde carree, blocs projetes qui rebondissent, petite fanfare.
+const TETM=()=>!!(typeof CUR!=='undefined'&&CUR&&CUR.theme==='tetris');
+const TARM=(()=>{
+ const TTC=TEAMS.tetris.map(q=>q.hex),NOFX=()=>HEADLESS||(typeof localSlot!=='undefined'&&localSlot<0);
+ const cv=(w,h,f)=>{const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);return new THREE.CanvasTexture(c)};
+ const sh=(hex,k)=>{const c=new THREE.Color(hex);if(k>0)c.lerp(new THREE.Color(0xffffff),k);else c.multiplyScalar(1+k);return'#'+c.getHexString()};
+ const lite=(hex,k)=>new THREE.Color(hex).lerp(new THREE.Color(0xffffff),k);
+ const TX={},BG={},bg=s=>BG[s]||(BG[s]=new THREE.BoxGeometry(s,s,s));
+ // petit bloc biseaute (meme dessin que les blocs de la carte)
+ function bev(hex){if(TX[hex])return TX[hex];return TX[hex]=cv(32,32,(x,w,h)=>{x.fillStyle=sh(hex,0);x.fillRect(0,0,w,h);
+   x.fillStyle=sh(hex,.55);x.beginPath();x.moveTo(0,0);x.lineTo(w,0);x.lineTo(w-6,6);x.lineTo(6,6);x.lineTo(6,h-6);x.lineTo(0,h);x.closePath();x.fill();
+   x.fillStyle=sh(hex,-.5);x.beginPath();x.moveTo(w,h);x.lineTo(0,h);x.lineTo(6,h-6);x.lineTo(w-6,h-6);x.lineTo(w-6,6);x.lineTo(w,0);x.closePath();x.fill();
+   x.fillStyle='rgba(255,255,255,.45)';x.fillRect(8,8,7,3);x.fillRect(8,8,3,7)})}
+ let GLOW=null;const glow=()=>GLOW||(GLOW=cv(64,64,(x,w,h)=>{const q=x.createRadialGradient(32,32,0,32,32,32);q.addColorStop(0,'rgba(255,255,255,1)');q.addColorStop(.3,'rgba(255,255,255,.5)');q.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=q;x.fillRect(0,0,w,h)}));
+ const add=(c,o,map)=>new THREE.MeshBasicMaterial({color:c,map:map||null,transparent:true,opacity:o,blending:THREE.AdditiveBlending,depthWrite:false});
+
+ // ---------- blaster L, dans la main des personnages ----------
+ const GM={};
+ function gmat(t){if(GM[t])return GM[t];const c=TTC[t];return GM[t]={blk:new THREE.MeshLambertMaterial({map:bev(c),emissive:c,emissiveIntensity:.32}),
+   dk:new THREE.MeshLambertMaterial({map:bev(0x434b5c),emissive:0x0c1426,emissiveIntensity:.5}),gl:new THREE.MeshBasicMaterial({color:lite(c,.55)})}}
+ // vu du dessus (camera de jeu) : le L est a plat, trois blocs vers l'avant et le quatrieme sur le cote, devant le casque
+ function gun(t,gn){if(HEADLESS)return;const M=gmat(t&3),B=(s,m,x,y,z)=>{const q=new THREE.Mesh(bg(s),m);q.position.set(x,y,z);gn.add(q);return q},c=5.6;
+  B(c,M.blk,8.4,25,1);B(c,M.blk,8.4+c,25,1);B(c,M.blk,8.4+2*c,25,1);B(c,M.blk,8.4,25,1-c);   // le L
+  B(4.2,M.dk,8.4,20.2,1);                                                                  // poignee : bloc gris sous le corps
+  B(3.6,M.gl,24.6,25,1);B(2.6,M.gl,27.7,25,1);B(1.8,M.gl,29.9,25,1);                       // canon : pixels lumineux de plus en plus petits, colles
+  B(2.2,M.gl,14,29,1)}                                                                     // viseur
+ const flc=t=>lite(TTC[t&3],.5).getHex();   // eclair au bout du canon (petit cube clair)
+
+ // ---------- tirs : cube lumineux qui tourne, trainee de pixels, reflet au sol ----------
+ let BK=null;
+ function bk(){if(BK)return BK;BK={core:bg(5.5),shell:bg(9),tr:[4.6,3.6,2.6].map(bg),pool:new THREE.PlaneGeometry(60,34),
+   M:TTC.map(c=>({core:new THREE.MeshBasicMaterial({color:lite(c,.72)}),shell:add(c,.55),tr:[.8,.55,.32].map(o=>add(c,o)),pool:add(c,.32,glow())}))};return BK}
+ function bolt(m,t){const K=bk();let g=m.userData.t;
+  if(!g){g=new THREE.Group();const co=new THREE.Mesh(K.core,K.M[0].core),sl=new THREE.Mesh(K.shell,K.M[0].shell);g.add(co,sl);
+   const tr=K.tr.map((geo,i)=>{const q=new THREE.Mesh(geo,K.M[0].tr[i]);q.position.x=-10-i*8;g.add(q);return q});
+   const p=new THREE.Mesh(K.pool,K.M[0].pool);p.rotation.x=-Math.PI/2;p.position.set(-6,-25,0);g.add(p);
+   g.userData={co,sl,tr,p};g.visible=false;m.add(g);m.userData.t=g}
+  const M=K.M[t&3],u=g.userData;u.co.material=M.core;u.sl.material=M.shell;u.tr.forEach((q,i)=>q.material=M.tr[i]);u.p.material=M.pool}
+ function spin(m){const g=m.userData.t;if(!g||!g.visible)return;const u=g.userData,a=performance.now()*.012;u.co.rotation.set(a,a*.7,0);u.sl.rotation.set(-a*.8,0,a*.6);u.tr.forEach((q,i)=>q.rotation.set(a*(1+i*.3),0,a*.5))}
+
+ // ---------- sons « 8 bits » : onde carree a 25 % (comme les vieilles consoles) ----------
+ let PW=null;
+ function pw(){if(PW&&PW.ac===AC)return PW.w;const n=24,re=new Float32Array(n),im=new Float32Array(n),d=.25;
+  for(let k=1;k<n;k++){re[k]=Math.sin(2*Math.PI*k*d)/(k*Math.PI);im[k]=(1-Math.cos(2*Math.PI*k*d))/(k*Math.PI)}PW={ac:AC,w:AC.createPeriodicWave(re,im)};return PW.w}
+ function pTone(o,t,f0,f1,dur,g){if(!avOk(t+dur+.02))return;const s=AC.createOscillator(),ge=AC.createGain();s.setPeriodicWave(pw());s.frequency.setValueAtTime(f0,t);if(f1!==f0)s.frequency.exponentialRampToValueAtTime(f1,t+dur);
+  ge.gain.setValueAtTime(.0001,t);ge.gain.linearRampToValueAtTime(g,t+.002);ge.gain.setValueAtTime(g,t+dur*.55);ge.gain.exponentialRampToValueAtTime(.0001,t+dur);s.connect(ge);ge.connect(o);s.start(t);s.stop(t+dur+.02)}
+ const SF=[1180,940,1320,1050];   // hauteur du « piou » par equipe : on reconnait les tirs adverses a l'oreille
+ function shotSnd(v,dx,t){if(!AC||!WS||v<.05)return;try{const bq=shotBudget(v);if(!bq||!avOk(AC.currentTime+.2))return;if(!IMPN)impNoise();const a=AC.currentTime+.003,far=v<.35,f=SF[t&3]*(1+(Math.random()-.5)*.06);
+  const o=AC.createGain();o.gain.value=v*.4*bq;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1800+12000*v*v;o.connect(lp);sndPan(lp,dx,600);
+  pTone(o,a,f,f*.28,.085,.55);
+  if(!far){pTone(o,a,f*.5,f*.16,.06,.32);impNz(o,a,.012,'highpass',2600,.7,.5,.0004)}}catch(e){}}
+ function impSnd(x,y){if(!AC||!WS||NOFX())return;const me=E&&E[localSlot],lx=me&&me.alive?me.x:CP.x,ly=me&&me.alive?me.y:CP.y,d=Math.hypot(x-lx,y-ly);if(d>IMP_R*1.4)return;
+  const nw=performance.now();if(nw-lastImp<22)return;lastImp=nw;try{if(!IMPN)impNoise();const t=AC.currentTime+.004,v=Math.pow(1-d/(IMP_R*1.4),1.5),o=AC.createGain();o.gain.value=v*.24;sndPan(o,x-lx,IMP_R);
+   pTone(o,t,600+Math.random()*90,300,.045,.5);pTone(o,t+.03,230,170,.04,.32);impNz(o,t,.02,'highpass',3000,.8,.4,.0005)}catch(e){}}
+ function fuseSnd(v,dx,q){if(!AC||!WS||v<.05)return;try{const a=AC.currentTime+.002,o=AC.createGain(),f=740*Math.pow(1.19,q);o.gain.value=v*.2;sndPan(o,dx,600);pTone(o,a,f,f,.045,.5)}catch(e){}}
+ function throwSnd(v){if(!AC||!WS||!(v>.05))return;try{const a=AC.currentTime+.002,o=AC.createGain();o.gain.value=v*.16;o.connect(WS);pTone(o,a,330,520,.05,.5);pTone(o,a+.05,520,520,.03,.35)}catch(e){}}
+ function boomSnd(v,dx){if(!AC||!WS||v<.03)return;try{if(!IMPN)impNoise();const r=Math.random,a=AC.currentTime+.004,o=AC.createGain();o.gain.value=v;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=500+11000*v*v;o.connect(lp);sndPan(lp,dx,700);
+  impNz(o,a,.02,'highpass',900,.5,1.6,.0004);                 // claquement
+  impNz(o,a,.45,'lowpass',1700,.6,1.25,.001,.45);             // souffle granuleux (bruit ralenti)
+  impTone(o,a,'square',150,38,.32,.4);impTone(o,a,'sine',72,30,.5,1.3);   // coup grave
+  [523.25,659.25,783.99,1046.5,1318.5].forEach((f,i)=>pTone(o,a+.07+i*.045,f,f,.07,.17));   // « ligne complete » : arpege montant
+  for(let k=0;k<6;k++){const t=a+.32+r()*.6;pTone(o,t,200+r()*60,120,.05,.12);impNz(o,t,.03,'bandpass',900+r()*900,1.5,.18)}}catch(e){}}   // blocs qui retombent
+
+ // ---------- impacts : eclats de pixels ----------
+ let PX=null;
+ function pxInit(){PX={p:[],f:[]};const g=bg(3.4);for(let i=0;i<90;i++){const m=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xffffff}));m.visible=false;sc.add(m);PX.p.push({m,t:1,l:0,vx:0,vy:0,vz:0,b:0,s:1})}
+  for(let i=0;i<10;i++){const m=new THREE.Mesh(bg(9),add(0xffffff,1));m.visible=false;sc.add(m);PX.f.push({m,t:9})}}
+ const pick=a=>a.reduce((p,q)=>p.t>=p.l?p:(q.t>=q.l?q:(p.t/p.l>q.t/q.l?p:q)));
+ function burst(x,y,vx,vy,t,n){if(NOFX()||Math.hypot(x-CP.x,y-CP.y)>1300)return;if(!PX)pxInit();const c=TTC[t&3],back=Math.atan2(-vy,-vx);
+  for(let k=0;k<n;k++){const p=pick(PX.p),a=back+(Math.random()-.5)*2.6,v=80+Math.random()*190;p.t=0;p.l=.35+Math.random()*.3;p.vx=Math.cos(a)*v;p.vz=Math.sin(a)*v;p.vy=60+Math.random()*150;p.b=0;p.s=.8+Math.random()*.7;
+   p.m.position.set(x,20+Math.random()*12,y);p.m.rotation.set(0,Math.random()*1.6,0);p.m.scale.setScalar(p.s);p.m.material.color.set(k%3===2?0xffffff:c);p.m.visible=true}
+  const f=PX.f.reduce((a,b)=>a.t>b.t?a:b);f.t=0;f.m.position.set(x,26,y);f.m.material.color.copy(lite(c,.4));f.m.rotation.set(.62,.79,0);f.m.visible=true}
+ function impact(b){const l=Math.hypot(b.vx,b.vy)||1,ix=b.x-b.vx/l*3,iy=b.y-b.vy/l*3;burst(ix,iy,b.vx,b.vy,b.team|0,7+(Math.random()*3|0));impSnd(ix,iy)}
+
+ // ---------- grenade T ----------
+ const TP=[[-1,0],[0,0],[1,0],[0,1]],GS=5.6,ZC=12;   // cases du T (la derniere sous le centre) ; taille d'un bloc ; cases de la zone de danger (px)
+ function grMesh(m){if(m.tt)return m.tt;const tt=new THREE.Group(),mt=new THREE.MeshLambertMaterial({map:bev(TTC[0]),emissive:TTC[0],emissiveIntensity:.35}),ct=mt.clone();
+  TP.forEach(([c,r],i)=>{const q=new THREE.Mesh(bg(GS-.3),i===1?ct:mt);q.position.set(c*GS,-r*GS,0);tt.add(q)});tt.userData={mt,ct,tm:-1};m.g.add(tt);m.tt=tt;return tt}
+ // zone de danger : grille de cases dans le cercle de degats ; 16 images, de vide a pleine (lignes remplies depuis le bas)
+ let ZT=null,ZN=0;const ZP=16,ZS=256;   // 16 px par case sur une image de 256 px (grille centree)
+ function zoneTex(){if(ZT)return ZT;const R=GR_R,n=Math.floor((R-ZC*.35)/ZC),N=2*n+1,P=ZP,o=(ZS-N*P)/2,inn=(i,j)=>Math.abs(i)<=n&&Math.abs(j)<=n&&Math.hypot(i*ZC,j*ZC)<=R-ZC*.35;ZN=N;ZT=[];
+  for(let L=0;L<=N;L++)ZT.push(cv(ZS,ZS,(x)=>{for(let j=-n;j<=n;j++)for(let i=-n;i<=n;i++){if(!inn(i,j))continue;const X=o+(i+n)*P,Y=o+(j+n)*P,full=(j+n)>=N-L,edge=!inn(i-1,j)||!inn(i+1,j)||!inn(i,j-1)||!inn(i,j+1);
+     if(full){x.fillStyle='rgba(255,255,255,.45)';x.fillRect(X+1,Y+1,P-2,P-2);x.fillStyle='rgba(255,255,255,.95)';x.fillRect(X+1,Y+1,P-2,3);x.fillRect(X+1,Y+1,3,P-2)}
+     else{x.fillStyle='rgba(255,255,255,.07)';x.fillRect(X+1,Y+1,P-2,P-2)}
+     x.strokeStyle=edge?'rgba(255,255,255,.9)':'rgba(255,255,255,.2)';x.lineWidth=edge?2:1;x.strokeRect(X+1.5,Y+1.5,P-3,P-3)}}));return ZT}
+ function grZone(m,g0,fu,now){if(!TETM()){if(m.tz)m.tz.visible=false;return}m.zf.visible=m.zr.visible=m.zc.visible=false;if(NOFX())return;
+  if(!m.tz){const Z=zoneTex(),q=new THREE.Mesh(new THREE.PlaneGeometry(ZS/ZP*ZC,ZS/ZP*ZC),add(0xffffff,.8,Z[0]));q.rotation.x=-Math.PI/2;q.renderOrder=2;q.visible=false;sc.add(q);m.tz=q}
+  if(fu<0){m.tz.visible=false;return}const tm=g0.tm??g0.team??0,L=Math.min(ZN,Math.floor(fu*(ZN+1))),pul=.5+.5*Math.sin(now/1000*(4+fu*14));
+  m.tz.visible=true;m.tz.position.set(g0.x,1.15,g0.y);m.tz.material.map=ZT[L];m.tz.material.color.setHex(TTC[tm&3]);m.tz.material.opacity=.55+.35*pul}
+ function grLook(m,g0){const tt=grMesh(m),u=tt.userData,tm=(g0.tm??g0.team??0)&3;tt.visible=true;for(let i=0;i<3;i++)m.g.children[i].visible=false;if(m.iem)m.iem.forEach(q=>q.visible=false);
+  if(u.tm!==tm){u.tm=tm;for(const q of[u.mt,u.ct]){q.map=bev(TTC[tm]);q.emissive.setHex(TTC[tm]);q.needsUpdate=true}}}
+ function grOff(m){if(m.tt)m.tt.visible=false;if(m.tz)m.tz.visible=false}
+ const TQ=new Map();   // dernier quart de meche joue par grenade (cote client, les grenades sont recreees a chaque etat recu)
+ // en vol : le T tourne ; au sol : a plat, un quart de tour et un bip a chaque quart de la meche, bloc central qui clignote
+ function grRot(m,g0,dt,now){const tt=grMesh(m),u=tt.userData,fu=g0.fu>=0?g0.fu:(g0.t>=g0.T?Math.min(1,(g0.t-g0.T)/GR_FUSE):-1);
+  if(fu<0){m.g.rotation.x+=dt*11;m.g.rotation.y+=dt*4;tt.rotation.set(0,0,0);tt.position.y=0;u.mt.emissiveIntensity=u.ct.emissiveIntensity=.35;return}
+  const q=Math.min(3,Math.floor(fu*4));m.g.rotation.set(0,0,0);tt.rotation.set(-Math.PI/2,0,(q+((g0.u|0)&3))*Math.PI/2);tt.position.y=-(g0.h-GS/2);
+  const pul=Math.sin(now/1000*(4+fu*14))>0;u.ct.emissiveIntensity=pul?1.5:.4;u.mt.emissiveIntensity=.35+fu*.5;
+  const id=g0.u|0;if(TQ.get(id)!==q){TQ.set(id,q);if(TQ.size>64)TQ.delete(TQ.keys().next().value);if(!NOFX())fuseSnd(Math.max(0,1-Math.hypot(g0.x-CP.x,g0.y-CP.y)/900),g0.x-CP.x,q)}}
+
+ // ---------- explosion « ligne complete » ----------
+ let BX=null;const m4=new THREE.Matrix4(),C1=new THREE.Color(),C2=new THREE.Color();
+ function bxInit(){const R=GR_R,n=Math.floor((R-ZC*.35)/ZC),cells=[];for(let j=-n;j<=n;j++)for(let i=-n;i<=n;i++)if(Math.hypot(i*ZC,j*ZC)<=R-ZC*.35)cells.push([i,j]);
+  const sq=cv(128,128,(x)=>{x.shadowColor='#fff';x.shadowBlur=14;x.strokeStyle='rgba(255,255,255,.95)';x.lineWidth=8;x.strokeRect(18,18,92,92);x.shadowBlur=0;x.lineWidth=3;x.strokeRect(18,18,92,92)}),
+   cg=new THREE.PlaneGeometry(ZC-2,ZC-2),DM=TETC.slice(0,7).map(c=>new THREE.MeshLambertMaterial({map:bev(c),emissive:c,emissiveIntensity:.3}));cg.rotateX(-Math.PI/2);
+  BX={n,DM,P:[...Array(4)].map(()=>{const im=new THREE.InstancedMesh(cg,add(0xffffff,.9),cells.length);for(let k=0;k<cells.length;k++)im.setColorAt(k,C1.setRGB(1,1,1));im.frustumCulled=false;im.visible=false;im.renderOrder=3;sc.add(im);
+    const sw=new THREE.Mesh(new THREE.PlaneGeometry(1,1),add(0xffffff,1,sq));sw.rotation.x=-Math.PI/2;sw.visible=false;sc.add(sw);
+    const fl=new THREE.Sprite(new THREE.SpriteMaterial({map:glow(),transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));fl.visible=false;sc.add(fl);
+    const db=[...Array(14)].map(()=>{const m=new THREE.Mesh(bg(7),DM[0]);m.visible=false;sc.add(m);return{m,vx:0,vy:0,vz:0,rx:0,rz:0,b:0,k:1}});
+    return{t:9,x:0,y:0,tm:0,im,sw,fl,db,cells,rnd:cells.map(()=>Math.random())}})};return BX}
+ let BLQ2=null;
+ function boom(x,y,tm){if(NOFX())return;const v=Math.max(0,1-Math.hypot(x-CP.x,y-CP.y)/1200);boomSnd(v,x-CP.x);gShake=Math.max(gShake,v*13);
+  if(Math.hypot(x-CP.x,y-CP.y)>1600)return;const X=bxInit(),q=X.P.reduce((a,b)=>a.t>b.t?a:b);q.t=0;q.x=x;q.y=y;q.tm=tm&3;q.rnd=q.cells.map(()=>Math.random());
+  q.im.visible=q.sw.visible=q.fl.visible=true;q.sw.position.set(x,1.8,y);q.fl.position.set(x,24,y);
+  for(const o of q.db){const a=Math.random()*6.28,r=Math.random()*GR_R*.45,s=140+Math.random()*240;o.vx=Math.cos(a)*s;o.vz=Math.sin(a)*s;o.vy=220+Math.random()*280;o.k=.8+Math.random()*.6;o.b=0;
+   o.m.material=X.DM[Math.random()*7|0];o.m.scale.setScalar(o.k);o.m.position.set(x+Math.cos(a)*r,6,y+Math.sin(a)*r);o.m.rotation.set(0,Math.random()*6.28,0);o.rx=(Math.random()-.5)*16;o.rz=(Math.random()-.5)*16;o.m.visible=true}
+  BLT.color.setHex(TTC[tm&3]);BLT.position.set(x,70,y);BLQ=null;BLQ2=q}
+ function tickFx(dt){
+  if(PX){for(const p of PX.p){if(!p.m.visible)continue;p.t+=dt;if(p.t>=p.l){p.m.visible=false;continue}p.vy-=600*dt;p.m.position.x+=p.vx*dt;p.m.position.z+=p.vz*dt;p.m.position.y+=p.vy*dt;
+    if(p.m.position.y<1.7&&p.vy<0){p.m.position.y=1.7;if(p.b<1){p.vy*=-.35;p.vx*=.5;p.vz*=.5;p.b++}else{p.vy=0;p.vx*=.8;p.vz*=.8}}
+    const f=p.t/p.l;p.m.scale.setScalar(p.s*(f<.6?1:f<.8?.66:.33))}   // retrecit par paliers, comme des pixels
+   for(const f of PX.f){if(!f.m.visible)continue;f.t+=dt;if(f.t>.09){f.m.visible=false;continue}const k=f.t/.09;f.m.scale.setScalar(1+k*1.6);f.m.material.opacity=1-k}}
+  if(!BX)return;const R=GR_R;
+  for(const q of BX.P){if(q.t>2)continue;q.t+=dt;const t=q.t,c=TTC[q.tm];
+   if(t>=1.9){q.im.visible=q.sw.visible=q.fl.visible=false;q.db.forEach(o=>o.m.visible=false);if(BLQ2===q){BLT.intensity=0;BLT.color.setHex(0xffa050);BLQ2=null}q.t=9;continue}
+   // grille : apparition en vague depuis le centre, clignotement blanc / couleur de l'equipe, puis effacement colonne par colonne du centre vers les bords
+   if(q.im.visible){const blink=t<.34&&(Math.floor(t*22)%2===0),end=.34+BX.n*.045+.1;
+    q.cells.forEach(([i,j],k)=>{const d=Math.hypot(i,j)/BX.n,tv=.34+Math.abs(i)*.045+Math.abs(j)*.004;let s=t<d*.08?0:1;if(t>tv)s=Math.max(0,1-(t-tv)/.07);
+     m4.makeScale(s||1e-4,1,s||1e-4);m4.setPosition(q.x+i*ZC,1.6,q.y+j*ZC);q.im.setMatrixAt(k,m4);
+     if(blink||t<.05)C1.setRGB(1,1,1);else C1.setHex(c).multiplyScalar(.75+q.rnd[k]*.5);q.im.setColorAt(k,C1)});
+    q.im.instanceMatrix.needsUpdate=true;q.im.instanceColor.needsUpdate=true;if(t>end)q.im.visible=false}
+   // onde carree et flash
+   if(t<.38){const e=1-Math.pow(1-t/.38,3);q.sw.scale.set(R*.35+e*R*2.3,R*.35+e*R*2.3,1);q.sw.material.opacity=.9*(1-t/.38);q.sw.material.color.copy(lite(c,.3))}else q.sw.visible=false;
+   if(t<.2){q.fl.scale.setScalar(40+t*900);q.fl.material.opacity=1-t/.2;q.fl.material.color.copy(C2.setRGB(1,1,1).lerp(C1.setHex(c),Math.min(1,t/.12)))}else q.fl.visible=false;
+   // blocs projetes : rebondissent deux fois, glissent, puis disparaissent par paliers
+   for(const o of q.db){if(!o.m.visible)continue;const p=o.m.position;o.vy-=1100*dt;p.x+=o.vx*dt;p.y+=o.vy*dt;p.z+=o.vz*dt;const h=3.5*o.k;
+    if(p.y<h&&o.vy<0){p.y=h;if(o.b<2){o.vy*=-.35;o.vx*=.55;o.vz*=.55;o.rx*=.4;o.rz*=.4;o.b++}else{o.vy=0;const k=Math.pow(.004,dt);o.vx*=k;o.vz*=k;o.rx*=k;o.rz*=k;o.m.rotation.x=Math.round(o.m.rotation.x/(Math.PI/2))*Math.PI/2;o.m.rotation.z=Math.round(o.m.rotation.z/(Math.PI/2))*Math.PI/2}}
+    if(o.b<3){o.m.rotation.x+=o.rx*dt;o.m.rotation.z+=o.rz*dt}if(o.b>=2&&o.vy===0)o.b=3;
+    o.m.scale.setScalar(o.k*(t<1.2?1:t<1.4?.66:t<1.6?.33:0));if(t>=1.6)o.m.visible=false}
+   if(BLQ2===q)BLT.intensity=t<.5?4.5*Math.pow(1-t/.5,2):0}}
+
+ // ---------- interface : icone de la grenade T (barre du bas) et bouton mobile ----------
+ function ico(x,y,r,on,css){g.save();g.globalAlpha=on?1:.3;const s=r*.66,e=Math.max(1,s*.2);
+  for(const[c,rr]of[[-1,-.5],[0,-.5],[1,-.5],[0,.5]]){const X=x+c*s-s/2,Y=y+rr*s-s/2;g.fillStyle=css;g.fillRect(X,Y,s-1,s-1);g.fillStyle='rgba(255,255,255,.5)';g.fillRect(X,Y,s-1,e);g.fillRect(X,Y,e,s-1);g.fillStyle='rgba(0,0,0,.35)';g.fillRect(X,Y+s-1-e,s-1,e);g.fillRect(X+s-1-e,Y,e,s-1)}g.restore()}
+ function greBg(css){const r=(x,y)=>"<rect x='"+x+"' y='"+y+"' width='9' height='9' rx='1'/>",svg="<svg xmlns='http://www.w3.org/2000/svg' viewBox='-1 -1 30 20'><g fill='"+css+"' stroke='rgba(0,0,0,.45)' stroke-width='1'>"+r(0,0)+r(9.5,0)+r(19,0)+r(9.5,9.5)+"</g><g fill='rgba(255,255,255,.45)'><rect x='1' y='1' width='7' height='2'/><rect x='10.5' y='1' width='7' height='2'/><rect x='20' y='1' width='7' height='2'/><rect x='10.5' y='10.5' width='7' height='2'/></g></svg>";
+  return 'url("data:image/svg+xml,'+encodeURIComponent(svg)+'") center/30px auto no-repeat,#000a'}
+ return{gun,flc,bolt,spin,shotSnd,throwSnd,impact,grLook,grOff,grRot,grZone,boom,tick:tickFx,ico,greBg}})();
 // ===================== CARTE « FRONT » (guerre, 10 contre 10) =====================
 // Sol boueux peint une fois (routes, tranchees creusees, crateres, berges), riviere animee, ponts (destructibles a l'etape 2),
 // sacs de sable, herissons tcheques, barbeles, ruines, epaves calcinees, arbres brules, camps (tentes, caisses, camions, miradors, canons),
@@ -10234,7 +10390,7 @@ IMPMAT.X='m';METAL.X=1;
 
 // vitesse des balles des fusils (px/s) et duree de vie (portee inchangee : 864 px)
 const BSPD=1152,BLIFE=.75;
-function draw(){tickSparks(Math.min(.05,gdt||.016));const mt=netMode&&E&&E[localSlot]?E[localSlot].team:0;MT=mt;{const me0=E[localSlot]||E[0];FLIP=!ZMB()&&!CRM()&&me0&&spawnGroup(me0.team)===1?1:0}
+function draw(){tickSparks(Math.min(.05,gdt||.016));TARM.tick(Math.min(.05,gdt||.016));const mt=netMode&&E&&E[localSlot]?E[localSlot].team:0;MT=mt;{const me0=E[localSlot]||E[0];FLIP=!ZMB()&&!CRM()&&me0&&spawnGroup(me0.team)===1?1:0}
 const me_=E.find(e=>e.id===localSlot),c=(me_&&me_.alive)?me_:(specTarget(mt)||E.find(e=>e.team==mt&&e.alive)||E[localSlot]||E[0]),anyB=E.some(e=>e.team==mt&&e.alive),now=performance.now();
 let fx=c.x,fy=c.y;if((st.s==='over'||st.s==='end')&&st.bs>=0){const q=SITES[st.bs];fx=q.x;fy=q.y}
 // Code Rouge : missile lance -> tout le monde (attaquants ET defenseurs) regarde le silo et suit la fusee qui decolle
@@ -10257,7 +10413,7 @@ for(const e of E){const m=e.m,v=ZMB()||e.team==mt||(e.body&&!e.alive)||(CRM()?cr
  const sw=e.alive?Math.sin(e.ph)*.7*Math.min(1,e.mvn||0):0;m.l1.rotation.z=sw;m.l2.rotation.z=-sw;
  m.fl.visible=e.fT>0;if(m.gn){const iv=WARM()&&(e.wv>=0||e.wl>=0);m.gn.visible=!iv;if(iv)m.fl.visible=false}m.pk.visible=!!(e.alive&&e.id===bomb.car&&e.team==mt&&!bomb.planted);m.pl.visible=true;m.hp.visible=m.rg.visible=!!e.alive&&e.sco!==1;{const car=!!(e.alive&&((e.id===bomb.car&&e.team==mt&&!bomb.planted)||(HACKM()&&HK.bc.st===2&&HK.bc.car===e.id))),on=car?(CUR.theme==='desert'?0xff2a2a:0xffc83c):0;if(on!==m.rgOn){m.rgOn=on;m.rg.material.color.setHex(on||m.rc)}}m.hp.scale.x=Math.max(.01,e.hp/(e.maxhp||BASE_HP))}
 motoDraw(Math.min(.05,gdt||.016),mt);
-for(const b of B){boltLook(b);const hh=b.hd?b.hd*Math.max(0,1-Math.hypot(b.x-b.x0,b.y-b.y0)/b.hf):0;b.m.position.set(b.x,26+hh,b.y);b.m.rotation.y=-Math.atan2(b.vy,b.vx)}
+for(const b of B){boltLook(b);const hh=b.hd?b.hd*Math.max(0,1-Math.hypot(b.x-b.x0,b.y-b.y0)/b.hf):0;b.m.position.set(b.x,26+hh,b.y);b.m.rotation.y=-Math.atan2(b.vy,b.vx);if(b.m.userData.t)TARM.spin(b.m)}
 cone.visible=!ZMB()&&!(c.wv>=0)&&!!c.alive&&(st.s==='live'||st.s==='freeze');cm.material.opacity=NEO()?.03:.07;cone.position.set(c.x,1.5,c.y);cone.rotation.y=-c.ang;
 if(RSPM()||ZMB()){BB.visible=RG.visible=RZ.visible=bir.visible=beam.visible=false}else{const pl=!!(bomb.planted&&!(st.s!=='live'&&st.ex)),gd=!bomb.planted&&bomb.car<0&&st.s!=='over';BB.visible=pl||(gd&&atk==mt);
 if(pl){BB.position.set(bomb.x,0,bomb.y);BB.scale.setScalar(1.6)}else{BB.position.set(bomb.ix,0,bomb.iy);BB.scale.setScalar(1.3)}
@@ -10330,7 +10486,7 @@ if(st.s==='end')drawEndScreen();else if(sbv)drawLiveBoard()}
 
 if(hm&&st.s!=='end'&&hm.alive&&!HUDH&&!document.body.classList.contains('sbopen')){drawATH(hm,narrow);HUDR.push([athX,athTop-4,athW,H-athTop-6])}
 if(gb_&&gb_.classList)gb_.classList.toggle('vide',!(hm&&hm.gren>0));
-{const dv=!!(hm&&hm.alive&&(hm.sco===1||(hm.wv>=0&&WARM()))&&st.s!=='end'),bc_=document.body.classList;if(bc_.contains('drv')!==dv)bc_.toggle('drv',dv)}{const hb=document.getElementById('hornBtn');if(hb&&hb.style&&hm){const v=!IS_PC&&CUR.theme==='neige'&&hm.alive&&hm.sco===1&&st.s==='live'?'block':'none';if(hb.style.display!==v)hb.style.display=v}}{const cb=document.getElementById('canBtn');if(cb&&cb.style&&hm){const sv=hm.sco?scoOf(hm):null,v=!IS_PC&&CUR.theme==='neige'&&hm.alive&&(hm.fu||0)>0&&(!hm.sco||(sv&&sv.fuel<=VAN_FMAX-VAN_CAN))&&st.s==='live'?'block':'none';if(cb.style.display!==v)cb.style.display=v}}if(gb_&&gb_.style&&hm){const k=NEO()?TD(hm.team).css:'';if(gb_.dataset.k!==k){gb_.dataset.k=k;gb_.style.background=k?'#000a radial-gradient(circle at 50% 50%,#22262e 0 9px,'+k+' 10px 12.5px,#0000 13.5px)':'';gb_.style.borderColor=k||''}}
+{const dv=!!(hm&&hm.alive&&(hm.sco===1||(hm.wv>=0&&WARM()))&&st.s!=='end'),bc_=document.body.classList;if(bc_.contains('drv')!==dv)bc_.toggle('drv',dv)}{const hb=document.getElementById('hornBtn');if(hb&&hb.style&&hm){const v=!IS_PC&&CUR.theme==='neige'&&hm.alive&&hm.sco===1&&st.s==='live'?'block':'none';if(hb.style.display!==v)hb.style.display=v}}{const cb=document.getElementById('canBtn');if(cb&&cb.style&&hm){const sv=hm.sco?scoOf(hm):null,v=!IS_PC&&CUR.theme==='neige'&&hm.alive&&(hm.fu||0)>0&&(!hm.sco||(sv&&sv.fuel<=VAN_FMAX-VAN_CAN))&&st.s==='live'?'block':'none';if(cb.style.display!==v)cb.style.display=v}}if(gb_&&gb_.style&&hm){const k=NEO()?TD(hm.team).css:(TETM()?'T'+TD(hm.team).css:'');if(gb_.dataset.k!==k){gb_.dataset.k=k;const tq=k[0]==='T',kc=tq?k.slice(1):k;gb_.style.background=tq?TARM.greBg(kc):kc?'#000a radial-gradient(circle at 50% 50%,#22262e 0 9px,'+kc+' 10px 12.5px,#0000 13.5px)':'';gb_.style.borderColor=kc||'';if(gb_.classList)gb_.classList.toggle('tet',tq)}}
 if(bomb.prog>0&&(bomb.planted?mt!==atk:mt===atk)){const w=120;pill(W/2-w/2,H*.62,w,5,3,'rgba(255,255,255,.18)');pill(W/2-w/2,H*.62,w*bomb.prog,5,3,'#ffc83c');txt(bomb.planted?'Désamorçage':'Pose',W/2,H*.62-12,11,'rgba(255,255,255,.75)',null,500)}
 {let n=0;const y0=narrow?HB+50:54;for(let i=KL.length-1;i>=0&&n<3;i--){const q=KL[i];if(q.t!==undefined&&T-q.t>6)continue;const t_=NM[q.k]+(q.g?'  ✹  ':'  ✕  ')+NM[q.v];g.font='600 11px system-ui';const w=g.measureText(t_).width+18;pill(W-w-10,y0+n*22,w,18,9,'rgba(8,12,22,.68)');txt(t_,W-10-w/2,y0+n*22+10,11,CUR.theme!=='nuit'?TD(CRM()&&E[q.k]?E[q.k].team:(q.k<TS?0:1)).css:((q.k<TS?0:1)==mt?'#a9c8ff':'#ffa9a9'),null,600);n++}}
 if(hm&&hm.alive&&!hm.moto&&hm.sco!==1&&Object.values(P).some(p=>!p.l&&!p.pend)){const[sx,sy]=wscr(hm.x,hm.y,22),L_=AIMT&&AIMT.alive?Math.min(300,Math.hypot(AIMT.x-hm.x,AIMT.y-hm.y)):260,[ex,ey]=wscr(hm.x+Math.cos(aimAng)*L_,hm.y+Math.sin(aimAng)*L_,22),[ax,ay]=wscr(hm.x+Math.cos(aimAng)*34,hm.y+Math.sin(aimAng)*34,22);
