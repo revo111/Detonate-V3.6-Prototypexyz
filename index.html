@@ -81,24 +81,23 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
  padding:max(16px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(28px,env(safe-area-inset-left))}
 #menu button{-webkit-tap-highlight-color:transparent}
 /* barre du haut */
-.mtop{grid-area:top;display:flex;align-items:center;gap:14px;min-width:0;padding-right:52px}
-@media (pointer:coarse){.mtop{padding-right:96px}}
+.mtop{grid-area:top;display:flex;align-items:center;gap:14px;min-width:0;min-height:46px;padding-right:56px}body.hasfs .mtop{padding-right:112px}
 #menu .logo{margin:0;display:flex;align-items:center;gap:14px;font:700 36px/1 var(--fd);letter-spacing:.22em;white-space:nowrap;text-shadow:0 2px 18px rgba(0,0,0,.55)}
 #menu .logo .ver{position:static;margin:0;padding:5px 8px 4px;border-radius:6px;border:1px solid rgba(255,200,60,.4);background:rgba(255,200,60,.1);color:#ffc83c;font:700 16px/1 var(--fd);letter-spacing:.06em;text-shadow:none}
 .mtopR{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:0}
-#langSel{display:flex;gap:2px;padding:3px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);margin:0}
-#langSel button{margin:0;padding:6px 10px;border:0;border-radius:999px;background:none;color:var(--mute);font:700 11.5px/1 var(--fd);letter-spacing:.08em;cursor:pointer}
+#langSel{display:flex;align-items:center;gap:2px;height:46px;box-sizing:border-box;padding:4px;border-radius:999px;border:1px solid var(--line);background:rgba(9,12,20,.62);margin:0}
+#langSel button{margin:0;height:36px;padding:0 15px;border:0;border-radius:999px;background:none;color:var(--mute);font:700 14px/1 var(--fd);letter-spacing:.08em;cursor:pointer}
 #langSel button.on{background:rgba(255,255,255,.16);color:#fff}
 #menu[data-v=lobby] #langSel{display:none}
-#founder{display:flex;align-items:center;gap:9px;min-width:0;padding:3px 4px 3px 3px;border-radius:999px;border:1px solid var(--line);background:rgba(9,12,20,.62);color:var(--ink);text-decoration:none;transition:border-color .2s;-webkit-tap-highlight-color:transparent}
+#founder{display:flex;align-items:center;gap:11px;min-width:0;height:46px;box-sizing:border-box;padding:4px 5px 4px 4px;border-radius:999px;border:1px solid var(--line);background:rgba(9,12,20,.62);color:var(--ink);text-decoration:none;transition:border-color .2s;-webkit-tap-highlight-color:transparent}
 #founder:hover,#founder:focus-visible{border-color:rgba(199,125,255,.65);outline:none}
-#founder .av{flex:none;width:30px;height:30px;padding:1.5px;box-sizing:border-box;border-radius:50%;background:linear-gradient(135deg,#ff4fb8,#7a5cff)}
+#founder .av{flex:none;width:36px;height:36px;padding:1.5px;box-sizing:border-box;border-radius:50%;background:linear-gradient(135deg,#ff4fb8,#7a5cff)}
 #founder .av img{display:block;width:100%;height:100%;box-sizing:border-box;border-radius:50%;border:1.5px solid #0b0f19}
 #founder .who{display:flex;flex-direction:column;min-width:0;line-height:1.1}
-#founder .role{font:600 10px/1.1 system-ui,sans-serif;color:var(--mute)}
-#founder .nm{font:700 13px/1.15 var(--fd)}
-#founder .xl{flex:none;display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;background:#fff;color:#000;font:700 11.5px/1 system-ui,sans-serif}
-#founder .xl svg{width:11px;height:11px}
+#founder .role{font:600 11.5px/1.1 system-ui,sans-serif;color:var(--mute)}
+#founder .nm{font:700 16px/1.15 var(--fd)}
+#founder .xl{flex:none;display:flex;align-items:center;gap:6px;height:36px;box-sizing:border-box;padding:0 14px;border-radius:999px;background:#fff;color:#000;font:700 13.5px/1 system-ui,sans-serif}
+#founder .xl svg{width:13px;height:13px}
 /* colonne de gauche : carte choisie, puis actions */
 .rail{grid-area:rail;align-self:center;min-height:0;max-height:100%;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:20px;padding:4px 8px 4px 2px;margin:-4px -8px -4px -2px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
 #mapInfo{display:flex;flex-direction:column;gap:12px}
@@ -200,7 +199,11 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
  #menu .panel{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);grid-template-rows:auto minmax(0,1fr);grid-template-areas:"top top" "rail strip";gap:8px 18px;
   padding:max(8px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
  #menu .logo{font-size:24px;letter-spacing:.2em;gap:10px}#menu .logo .ver{font-size:12.5px;padding:4px 6px 3px}
- #founder .role{display:none}#founder .av{width:26px;height:26px}#founder .xl{padding:5px 8px}
+ #founder .role{display:none}#founder{height:40px;gap:9px}#founder .av{width:31px;height:31px}#founder .nm{font-size:14.5px}#founder .xl{height:31px;padding:0 11px;font-size:12.5px}
+ #langSel{height:40px}#langSel button{height:31px;padding:0 12px;font-size:12.5px}
+ .mtop{min-height:40px;padding-right:50px}body.hasfs .mtop{padding-right:100px}
+ body.inmenu #muteBtn,body.inmenu #fsBtn{top:max(8px,env(safe-area-inset-top,0px))!important;width:40px!important;height:40px!important}
+ body.inmenu #muteBtn{right:max(14px,env(safe-area-inset-right,0px))!important}body.inmenu #fsBtn{right:calc(max(14px,env(safe-area-inset-right,0px)) + 50px)!important}
  .rail{gap:10px}#mapInfo{gap:7px}
  #mName{font-size:clamp(28px,4.6vw,40px)}
  .chip{padding:3px 9px;font-size:11.5px}
@@ -224,9 +227,12 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
  #menu .panel{display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;gap:14px;padding:max(12px,env(safe-area-inset-top)) 16px max(18px,env(safe-area-inset-bottom))}
  #menu .panel>*,.rail>*{flex-shrink:0}
  .rail,.mtop{display:contents}
- #menu .logo{order:0;min-height:34px;padding-right:96px}.mtopR{order:6;margin:6px 0 0;justify-content:space-between;flex-wrap:wrap;gap:10px}#mapInfo{order:1;margin-top:auto;padding-top:22vh}#mapPick{order:2}#mainMenu,#privateMenu,#lobby{order:3}#menuMsgMain{order:4}
+ #menu .logo{order:0;min-height:40px;padding-right:50px}body.hasfs #menu .logo{padding-right:100px}.mtopR{order:6;margin:6px 0 0;justify-content:space-between;flex-wrap:wrap;gap:10px}#mapInfo{order:1;margin-top:auto;padding-top:22vh}#mapPick{order:2}#mainMenu,#privateMenu,#lobby{order:3}#menuMsgMain{order:4}
  #menu[data-v=privateMenu] #mapInfo{padding-top:0}#menu[data-v=lobby] .mtop{margin-bottom:6px}
  #menu .logo{font-size:24px;letter-spacing:.18em;gap:10px}#menu .logo .ver{font-size:12.5px;padding:4px 6px 3px}
+ #founder{height:42px}#founder .av{width:33px;height:33px}#founder .xl{height:33px}#langSel{height:42px}#langSel button{height:33px}
+ body.inmenu #muteBtn,body.inmenu #fsBtn{top:max(12px,env(safe-area-inset-top,0px))!important;width:40px!important;height:40px!important}
+ body.inmenu #muteBtn{right:16px!important}body.inmenu #fsBtn{right:66px!important}
  #mName{font-size:44px}
  #mapPick{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:8px;margin:0 -16px;padding:2px 16px 4px;scrollbar-width:none}
  #mapPick::-webkit-scrollbar{display:none}
@@ -234,6 +240,17 @@ body.inmenu #knfBtn,body.sbopen #knfBtn,body.zcm #knfBtn,body:not(.zmb) #knfBtn{
  .lbAct{position:static;background:none}
 }
 @media (prefers-reduced-motion:reduce){#mName.swap{animation:none}#menu .mCard,#menu .menuBtn{transition:none}#mfade{transition-duration:.01s!important}}
+
+/* boutons son et plein ecran dans le menu : meme hauteur et meme ligne que le fondateur et les langues, alignes sur le bord du menu */
+body.inmenu #muteBtn,body.inmenu #fsBtn{top:max(16px,env(safe-area-inset-top,0px))!important;width:46px!important;height:46px!important;border-radius:50%!important;border:1px solid rgba(255,255,255,.11)!important;
+ background:rgba(9,12,20,.62)!important;color:#eef2f8!important;opacity:1!important;box-sizing:border-box;transition:border-color .2s,background .2s}
+body.inmenu #muteBtn{right:max(28px,env(safe-area-inset-right,0px))!important}body.inmenu #fsBtn{right:calc(max(28px,env(safe-area-inset-right,0px)) + 56px)!important}
+body.inmenu #muteBtn:hover,body.inmenu #fsBtn:hover{border-color:rgba(255,255,255,.32)!important;background:rgba(28,36,54,.88)!important}
+body.inmenu #muteBtn svg,body.inmenu #fsBtn svg{width:20px;height:20px}
+@media (max-height:560px) and (min-width:600px){body.inmenu #muteBtn,body.inmenu #fsBtn{top:max(8px,env(safe-area-inset-top,0px))!important;width:40px!important;height:40px!important}
+ body.inmenu #muteBtn{right:max(14px,env(safe-area-inset-right,0px))!important}body.inmenu #fsBtn{right:calc(max(14px,env(safe-area-inset-right,0px)) + 50px)!important}body.inmenu #muteBtn svg,body.inmenu #fsBtn svg{width:18px;height:18px}}
+@media (max-width:700px) and (min-height:561px),(max-width:599px){body.inmenu #muteBtn,body.inmenu #fsBtn{top:max(12px,env(safe-area-inset-top,0px))!important;width:40px!important;height:40px!important}
+ body.inmenu #muteBtn{right:16px!important}body.inmenu #fsBtn{right:66px!important}body.inmenu #muteBtn svg,body.inmenu #fsBtn svg{width:18px;height:18px}}
 </style></head><body>
 <div id="menu" data-v="mainMenu"><div id="mfade"></div><div class="panel">
 <header class="mtop"><h1 class="logo">DETONATE<span class="ver">V3.6</span></h1><div class="mtopR"><a id="founder" href="https://x.com/Revo_YHWH" target="_blank" rel="noopener noreferrer" aria-label="Revo sur X (@Revo_YHWH)"><span class="av"><img alt="Revo" width="40" height="40" src="data:image/webp;base64,UklGRmoJAABXRUJQVlA4IF4JAACQKgCdASqAAIAAPlUmkEWjoiGVCmzoOAVEsQBcNQsr/1Wzc8fgSIBsbXzAP1d6eXmG/aH1ePSn6AH9z/unW4egn+x3p0eyh+5P7me060k588uzS6M/ft17BZXDbXSRzw6RBgT12HvGIKPJz/TH4WKGYERkkKBPkFO/NKpvG2Esm/ThmAJatRLq+o5PELY8r4PxYNk9KSD+3itJGSN3iL1C3WPPTBHUGxbmrhSSpbTgRGPcUrIFAxkJVZ3vPKCGpAyfVi7bDAJE3rgcBzNqIlA09Njc3AUMIG8mqKnhBcpNUpPkGqDl8hVHz9mVJKximQugZDmEFKriiAmj0uVEPZpJZ/BXRE0pvRRH0+RvjShWhoLlmZALGkVlhAbdp1EDdTGll5ctxAJ5ngiMExLOCg8Hb02BcvpBrdFdAI3kjQTMnQDBJyKs7dgS4lSSLp736cGYELvwYmjnK/Kext4AAP78do+x25bIuKsGkTa/trMENwvtoW2pVRiOzFTUPWYRm02Nz5ELLwefQArZltp5bUULF1lveZ7j+0XK3xq0xBg6AcWDGfPHYU4hT/WydJhGou/7TBWdfqZcefVbpCMchNw7B9FgzX4JrdviIF99qB+QDBlOT3g4DoVLIBR/w6+BQHeZOZ1h3DlUd3ejdIVrBLP/jVeRRKCfSFrFz1ze0xIDLFFmNaln2bXTU+15OFqx6W8tDvNk3UAdntvBb+mm3dINFo/IfHVtV1ka3M7dONoREO4lRmjkQOVfzRYoDWnoqoMbXEk8G8QtVEBNya+UgR76bNZ+m5Bp/jqbLzgtZoW9atHSH6hdd0MMdGb7mJRtcxK4ek+VMI0Obf3q5LYis0qHnh5kWg6ktDw/iuTp/kiLE8N5JtoTpDpQldCAX01iRkSH1N3n2ScCwm1hGd3KT/63Kf9dGPxGMu5PsSTGUbs8D7JZ5R0gxmlz2vjYjht2V61vOOqv2AJf+xNiwdcKOVEOrhWWcGh0PECJR/nyAh+IkKbV/O2mtkPoH8ixNp9jTMcnRHc3hACsMJuz7MfxGWTnQ1L63SrJ64Xdo8sfjCt+j2ONSuIyLvk7hSFdsbNATrIOiqBNnqzYV92tHMrXYkAtCJ4kkt0tH9fzJhg1ULILihBy1z8UiHgHNK1Da7AcxjkTZoMKtevScqE+LPqdfMa0O1FT67boOTh5mOvQg8GvkpSsT8OZi+9dTMzjzVMv+04nC/v5hzr9yqOQOV4kmv31hz2jue/Evhcb6/FkQHX2yl1K0GYIBkExwEjV9rDax8jBljIUfihwGv4dSk4v/ymtPbyN1Sy/xiZIuq24V/Hg4y0sZ5PM5jTSEhPSC7G5ewyMrEDTXqnieKEKF3E/FzmR4hMWaMBnKY15DTt2Mr+AsgcWw7wxT9hm1eLFnDeF+XpvzxsG67c5lpdizZAiUYesqTwaDFwv4I56/zO+PxBx8OwwjOmw3k0MotJrr593S4G/6qPPvNFxVWp20deWQnefB62U7EI0V+VsudapNyZF9JRXnOg8r8BqrMdKCDcD2Z64321t0dJ5OyS9kNld2Eb7haOAkVYvibnYDjUGR3y+2zVYJYK3wr9hVydb86mVM7kp3ci+diSOYWGhEHnlQXjGl7AbzloHQm/4xz9MjiT0ZYzQKDo8/fbeitCfLW3kDJYw5acKs9K2nyIuk2QPqBF3G2lXhU9eMBV2G42Sxcdwr63PrNdPeUuRIHcaLZiqImWqshYdERReKpHRUXIt0+lgXtaeFuiApRXhVWnBoXVfVIKMrKDfM54jpH568ah+m9j8WySaJ/K2C3MNOTzUTzZgfmoJGI6wwwHDpXGZAkBbpjBspF2S6ACZY0UbjenBt1WxCCD5Ew9DLKp0Dhj/kpjsPdf6GNr/AC03KK7485Dak2kwNxe84h7diKD0/h8By0G/1XIyK39VtQF2zgjrhRW07DJcyVHq69i0TJyh49frOZgoOpNWgWgjKQJaHVSz5FLpylqsaAiL/8edItQ1QlypG774rSHujq0xjspjmCtVNuwEkLknDheuxqLFSde/uRXSGXqOx4/RAKL1h/0K3z9wdnSdotUTswFAfzBYAk+46DDc9fRm+DLOkQ56lo+SBx8jzjvSiwNO9jJgNh2j2cX0Au78k+Vt8LjpQ+75xQGY0RAg52BpI8jk6CgWopkLeTTBbE/wNcrOJ0nyZEVOh03okA+BvGHkNwBDpZAIbHSUhjxegonjkht2uV0zZ6jeM9XNG5SvVdrJ6JLbPQmL+89aWHImont1oXvT2JWtSsFFKwVuMweWS3XwSqBxKRj+IEfmdYU6IMki9cY0xLuubyYTLfGo5TEIofoinWcd1rWH4pQ2TEVKhaL3G8+jRrjzrKiQgfB43mieNmzDvFuq/uR+KiZZ/hwSZYpUU9/KhSaSmV0aK1AVXUQafc53ouXYYQqVx6/lq8YWAxdEGyKtDxLikX+/RzmNFp/z/hd5vpX29Pc9eBqmjsEbCl809N0SazfeAwmsL29GS1sYlCpi2QrfOuO3htekQKJWGQwB4rxko3LWbCyLIpcL6CrIRWh+Z+nYZ338TgtKcvocbqC9K4DNl/oZzDMLwQcgjtYl4xXz5biLJmi2yzNgn1zCCRWdTG7re2KfkiNKimNLFpILeJj4mduoCkzX4OtsH+sgzqXeTyhYSDYgecSGLEGJQXNM3aOHN6WG32/oa+Hyy7KiSM1IknrimGbZBVhvKB/2DF1TfW17sV0GKO+RCqQEN4jBJPnwgCvxvLcP54IQpUMIeXP/UJbMqHHj/xYn/FoG/cZdCzYFjwm0xMFvATryXQ7IpwIewKXtzuzFPMiimq7AI/mg4HhQ5jyrOrwfB9MOwA4Eyjk96M3b5PaKlTrgFnc0T8twbWIWUYsLrcmGt8LWud3FCDtM/m4dDDY0qVGaTI2XJgBu8w+f27YEHV18J7aZr0CY+MF3XLjagyy5MGkK+AHBrqIofDwqC5Q3Uefb8/Xai0d0Tb+cPsoaLpGaFJIy8Ik8vgnyJCKCFDBNdoGEH9vJd52IunFZzAViL0eWcgxX1VuwcE1bX+JbK1iT6hw7EXHEUtwnceD2vRx6bqcOs0t9nyX3sbba3DrirKEJtpyah5Sqsi12LJijd5fFpP3Nu6u8B5SppBMHe6SJCEFZvCtOxesWHuCZWjA7oyRT9a6FXhX+clPHgstKQgAAAAAA"></span><span class="who"><span class="role">Fondateur</span><span class="nm">Revo</span></span><span class="xl"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>Suivre</span></a><div id="langSel"><button data-lang="fr">FR</button><button data-lang="en">EN</button></div></div></header>
@@ -3448,13 +3465,13 @@ $('leaveBtn').onclick=()=>{netBye=true;rcSave();sendNet({type:'leave'});try{netS
 (()=>{try{const b=document.getElementById('fsBtn'),tip=document.getElementById('fsTip'),d=document,el=d.documentElement;
  const phone=matchMedia('(pointer:coarse)').matches&&Math.min(screen.width,screen.height)<=900;
  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
- if(!phone||standalone)return;
- const can=!!(el.requestFullscreen||el.webkitRequestFullscreen),isFs=()=>!!(d.fullscreenElement||d.webkitFullscreenElement);
+ const can=!!(el.requestFullscreen||el.webkitRequestFullscreen);if(standalone||(!phone&&!can))return;   // ordinateur : seulement si le plein ecran existe
+ const isFs=()=>!!(d.fullscreenElement||d.webkitFullscreenElement);
  const IN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
   OUT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
  const icon=()=>{b.innerHTML=isFs()?OUT:IN};
  const say=t=>{tip.textContent=t;tip.style.opacity=1;clearTimeout(say.t);say.t=setTimeout(()=>tip.style.opacity=0,4500)};
- b.style.display='flex';icon();
+ b.style.display='flex';document.body.classList.add('hasfs');icon();
  b.addEventListener('click',async e=>{e.preventDefault();
   if(!can)return say("Sur iPhone : touche Partager puis « Sur l'écran d'accueil », et lance le jeu depuis l'icône pour jouer en plein écran.");
   try{if(isFs())await(d.exitFullscreen||d.webkitExitFullscreen).call(d);else await(el.requestFullscreen||el.webkitRequestFullscreen).call(el,{navigationUI:'hide'})}catch(x){}
@@ -7958,10 +7975,16 @@ function crOverlay(hm,mt,now,HB2){crEvents(mt,now);if(st.s==='end')return;const 
 function crMini(){if(CR.st==='wait'||st.s==='end')return;const nw=performance.now(),mine=CR.car>=0&&E[CR.car]&&E[CR.car].team===MT,c=mine?'#7dff9a':'#ffd24a';
  g.globalAlpha=.28;g.fillStyle=c;g.beginPath();g.arc(CR.zx,CR.zy,CR_ZR,0,7);g.fill();g.globalAlpha=.6+.4*Math.abs(Math.sin(nw/300));g.strokeStyle=c;g.lineWidth=34;g.beginPath();g.arc(CR.zx,CR.zy,CR_ZR+30,0,7);g.stroke();g.globalAlpha=1}
 // mini-carte : cristal (au sol, ou sur le dos du porteur : cercle a la couleur de son equipe), en pixels
-function crMiniPx(ox,oy){if(st.s==='end'||CR.st==='wait')return;const nw=performance.now(),car=CR.st==='car'?E[CR.car]:null,x=car?car.x:CR.x,y=car?car.y:CR.y,px=ox+x*MM,py=oy+y*MM,k=.5+.5*Math.abs(Math.sin(nw/220)),R=MMW>150?6:5;
- if(car){g.save();g.globalAlpha=.35+.45*k;g.fillStyle=TD(car.team).css;g.beginPath();g.arc(px,py,R+5+k*2,0,7);g.fill();g.globalAlpha=1;g.lineWidth=2;g.strokeStyle=TD(car.team).css;g.beginPath();g.arc(px,py,R+3,0,7);g.stroke();g.restore()}
- else if(CR.drop){g.save();g.globalAlpha=.3+.4*k;g.strokeStyle='#fff';g.lineWidth=1.5;g.beginPath();g.arc(px,py,R+4+k*4,0,7);g.stroke();g.restore()}
- crGem(px,py,R*.62,-1,nw)}
+// au sol, il clignote et envoie des ondes (comme un radar) pour qu'on le repere tout de suite ; les 6 premieres secondes
+// apres son apparition, il est plus gros et les ondes sont doubles et plus grandes
+let CRMS={st:'wait',t:0};
+function crMiniPx(ox,oy){const nw=performance.now();if(CR.st!==CRMS.st){if(CR.st==='ground'&&CRMS.st==='wait')CRMS.t=nw;CRMS.st=CR.st}
+ if(st.s==='end'||CR.st==='wait')return;const car=CR.st==='car'?E[CR.car]:null,x=car?car.x:CR.x,y=car?car.y:CR.y,px=ox+x*MM,py=oy+y*MM,k=.5+.5*Math.abs(Math.sin(nw/220)),R=MMW>150?6:5;
+ if(car){g.save();g.globalAlpha=.35+.45*k;g.fillStyle=TD(car.team).css;g.beginPath();g.arc(px,py,R+5+k*2,0,7);g.fill();g.globalAlpha=1;g.lineWidth=2;g.strokeStyle=TD(car.team).css;g.beginPath();g.arc(px,py,R+3,0,7);g.stroke();g.restore();crGem(px,py,R*.62,-1,nw);return}
+ const fresh=nw-CRMS.t<6000,c=CR.drop?'#ffffff':'#ffd24a',ph=(nw%1000)/1000,on=(nw%600)<380;
+ g.save();for(const o of fresh?[0,.5]:[0]){const q=(ph+o)%1;g.globalAlpha=(1-q)*(fresh?.95:.7);g.strokeStyle=c;g.lineWidth=fresh?2.4:1.8;g.beginPath();g.arc(px,py,R+2+q*(fresh?18:12),0,7);g.stroke()}
+ // halo qui clignote derriere le cristal
+ g.globalAlpha=on?.55:.12;g.fillStyle=c;g.beginPath();g.arc(px,py,R+(fresh?4:2.5),0,7);g.fill();g.globalAlpha=on?1:.35;crGem(px,py,R*(fresh?.85:.68),-1,nw);g.restore()}
 // salon en ligne : 4 equipes de 3
 function crLobby(){const TT=TEAMS.tetris,row=slot=>{const p=netPlayers.find(x=>x.slot===slot),Q=TT[slot/3|0];return '<div class="player" style="border-left:4px solid '+Q.dot+';background:'+Q.pill.replace(/[\d.]+\)$/,'.16)')+'">'+(p?lobName(p):'<span style="opacity:.55">IA</span>')+'</div>'};
  $('players').innerHTML='<div class="small" style="margin-bottom:8px">'+LG('CARTE : TETRIS · MODE CRISTAL · 4 équipes de 3','MAP: TETRIS · CRYSTAL MODE · 4 teams of 3')+'</div><div class="small" style="margin:-4px 0 6px;opacity:.75">'+LG('Déposez le cristal dans la zone dorée · premier à ','Bring the crystal to the golden zone · first to ')+CR_WIN+'</div>'+
